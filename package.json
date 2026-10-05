@@ -12,7 +12,8 @@
     "build": "npm run build --workspace=backend && npm run build --workspace=frontend",
     "start": "node backend/dist/index.js",
     "seed": "npm run seed --workspace=backend",
-    "test": "npm run test --workspace=backend"
+    "test": "npm run test --workspace=backend",
+    "deploy": "npm run build --workspace=frontend && node scripts/deploy-pages.cjs"
   },
   "devDependencies": {
     "concurrently": "^9.1.2"
