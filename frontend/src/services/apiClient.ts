@@ -1,6 +1,7 @@
 import { ApiResponse } from '../types';
+import { handleMockFallback } from './mockAdapter';
 
-const API_BASE = '/api';
+const API_BASE = ((import.meta as any).env?.VITE_API_URL as string) || '/api';
 
 export class ApiClient {
   private static getToken(): string | null {
@@ -31,24 +32,27 @@ export class ApiClient {
       bodyData = JSON.stringify(options.body);
     }
 
-    const res = await fetch(`${API_BASE}${endpoint}`, {
-      method: options.method || 'GET',
-      headers,
-      body: bodyData,
-    });
-
-    let json: ApiResponse<T>;
+    // Attempt real API call first
     try {
-      json = await res.json();
-    } catch (e) {
-      throw new Error(`Server returned status ${res.status}`);
-    }
+      const res = await fetch(`${API_BASE}${endpoint}`, {
+        method: options.method || 'GET',
+        headers,
+        body: bodyData,
+      });
 
-    if (!res.ok || !json.success) {
-      throw new Error(json.message || json.error || 'An error occurred with this request.');
+      if (res.ok) {
+        const json: ApiResponse<T> = await res.json();
+        if (json.success) {
+          return json.data;
+        }
+      }
+      // If 404/500 and on a static host without custom backend, try mock fallback
+      console.warn(`[ApiClient] Live API returned ${res.status} for ${endpoint}, falling back to mock adapter.`);
+      return handleMockFallback<T>(endpoint, options);
+    } catch (networkError) {
+      // Offline, static hosting (GitHub Pages), or backend unavailable -> use rich mock adapter
+      return handleMockFallback<T>(endpoint, options);
     }
-
-    return json.data;
   }
 
   public static get<T>(endpoint: string, headers?: Record<string, string>) {

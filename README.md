@@ -1,6 +1,8 @@
 # 🎂 Whisk & Layers — Artisanal Customized Cake Marketplace
 
 > **A modern, full-stack relational web platform connecting dessert lovers with local artisan bakeries for signature prebuilt recipes and bespoke custom cake creations.**
+> 
+> 🌐 **Live Demo:** [https://desingnerlaunda05.github.io/whisk-and-layers/](https://desingnerlaunda05.github.io/whisk-and-layers/)
 
 ---
 

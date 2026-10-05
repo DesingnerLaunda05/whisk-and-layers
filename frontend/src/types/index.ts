@@ -54,6 +54,7 @@ export interface Bakery {
   is_active: number;
   minimum_lead_days: number;
   created_at: string;
+  updated_at?: string;
 }
 
 export interface CakeCategory {
@@ -80,8 +81,10 @@ export interface Cake {
   is_available: number;
   is_active: number;
   created_at: string;
+  updated_at?: string;
   bakery_name?: string;
   bakery_city?: string;
+  bakery_slug?: string;
   category_name?: string;
 }
 
@@ -92,8 +95,8 @@ export interface CustomizationOption {
   label: string;
   description: string | null;
   extra_price: number;
-  image_url: string | null;
-  is_active: number;
+  image_url?: string | null;
+  is_active?: number;
   sort_order: number;
 }
 
