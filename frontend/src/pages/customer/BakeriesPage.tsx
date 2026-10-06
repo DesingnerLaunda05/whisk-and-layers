@@ -117,10 +117,15 @@ export const BakeriesPage: React.FC = () => {
                 className="form-control"
                 style={{ padding: '0.5rem 0.8rem', fontSize: '0.85rem', width: 'auto' }}
               >
-                <option value="">All Locations</option>
-                <option value="San Francisco">San Francisco, CA</option>
-                <option value="Oakland">Oakland, CA</option>
-                <option value="Berkeley">Berkeley, CA</option>
+                <option value="">All Locations (India)</option>
+                <option value="Ahmedabad">Ahmedabad, Gujarat</option>
+                <option value="Vadodara">Vadodara, Gujarat</option>
+                <option value="Rajkot">Rajkot, Gujarat</option>
+                <option value="Surat">Surat, Gujarat</option>
+                <option value="Mumbai">Mumbai, Maharashtra</option>
+                <option value="Pune">Pune, Maharashtra</option>
+                <option value="Bengaluru">Bengaluru, Karnataka</option>
+                <option value="Delhi">Delhi NCR</option>
               </select>
             </div>
 

@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { isValidIndianPhone, isValidIndianPin } from '../utils/indiaConstants.js';
 
 // Auth Schemas
 export const registerSchema = z.object({
@@ -8,7 +9,13 @@ export const registerSchema = z.object({
     .min(8, 'Password must be at least 8 characters long')
     .max(100, 'Password is too long'),
   fullName: z.string().min(2, 'Full name must be at least 2 characters').max(100),
-  phone: z.string().optional().nullable(),
+  phone: z
+    .string()
+    .refine((val) => !val || isValidIndianPhone(val), {
+      message: 'Please provide a valid 10-digit Indian mobile number (e.g. 9876543210 or +91 9876543210)',
+    })
+    .optional()
+    .nullable(),
   role: z.enum(['CUSTOMER', 'BAKERY']).default('CUSTOMER'),
   // Bakery specific fields if registering as a bakery
   bakeryName: z.string().optional(),
@@ -17,7 +24,12 @@ export const registerSchema = z.object({
   address: z.string().optional(),
   city: z.string().optional(),
   state: z.string().optional(),
-  postalCode: z.string().optional(),
+  postalCode: z
+    .string()
+    .refine((val) => !val || isValidIndianPin(val), {
+      message: 'PIN code must be a valid 6-digit number (e.g. 380015)',
+    })
+    .optional(),
 });
 
 export const loginSchema = z.object({
@@ -27,7 +39,13 @@ export const loginSchema = z.object({
 
 export const updateProfileSchema = z.object({
   fullName: z.string().min(2).max(100).optional(),
-  phone: z.string().max(20).optional().nullable(),
+  phone: z
+    .string()
+    .refine((val) => !val || isValidIndianPhone(val), {
+      message: 'Please provide a valid 10-digit Indian mobile number',
+    })
+    .optional()
+    .nullable(),
   avatarUrl: z.string().url().optional().nullable(),
 });
 
@@ -39,8 +57,18 @@ export const updateBakerySchema = z.object({
   address: z.string().min(5).optional(),
   city: z.string().min(2).optional(),
   state: z.string().min(2).optional(),
-  postalCode: z.string().min(3).optional(),
-  phone: z.string().min(5).optional(),
+  postalCode: z
+    .string()
+    .refine((val) => !val || isValidIndianPin(val), {
+      message: 'PIN code must be a valid 6-digit number',
+    })
+    .optional(),
+  phone: z
+    .string()
+    .refine((val) => !val || isValidIndianPhone(val), {
+      message: 'Please provide a valid 10-digit Indian mobile number',
+    })
+    .optional(),
   email: z.string().email().optional(),
   logoUrl: z.string().optional().nullable(),
   bannerUrl: z.string().optional().nullable(),
@@ -78,12 +106,16 @@ export const orderItemSchema = z.object({
 export const createOrderSchema = z.object({
   bakeryId: z.number().int().positive('A valid bakery ID is required'),
   customerName: z.string().min(2, 'Customer name is required'),
-  customerPhone: z.string().min(5, 'Contact phone number is required'),
+  customerPhone: z.string().refine(isValidIndianPhone, {
+    message: 'Please provide a valid 10-digit Indian mobile number',
+  }),
   deliveryAddress: z.string().min(5, 'Delivery address is required'),
   deliveryDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Delivery date must be YYYY-MM-DD'),
   deliveryTimeSlot: z.string().optional().nullable(),
   specialInstructions: z.string().max(500).optional().nullable(),
-  paymentMethod: z.enum(['PAY_ON_DELIVERY', 'CARD_PAYMENT']).default('PAY_ON_DELIVERY'),
+  paymentMethod: z
+    .enum(['PAY_ON_DELIVERY', 'UPI_PAYMENT', 'CARD_PAYMENT', 'NET_BANKING', 'WALLET'])
+    .default('PAY_ON_DELIVERY'),
   items: z.array(orderItemSchema).min(1, 'Order must contain at least one item'),
 });
 

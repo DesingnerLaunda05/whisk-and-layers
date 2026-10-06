@@ -28,7 +28,7 @@ async function makeRequest(path: string, options: { method?: string; body?: any;
 }
 
 beforeAll(async () => {
-  await seedDatabase();
+  await seedDatabase(true);
   app = createApp();
   await new Promise<void>((resolve) => {
     server = app.listen(0, () => {
@@ -41,7 +41,7 @@ beforeAll(async () => {
   });
 });
 
-describe('Whisk & Layers Backend Functional & Security Test Suite', () => {
+describe('Whisk & Layers India-First Backend Test Suite', () => {
   let customerToken = '';
   let customerId = 0;
   let bakeryToken = '';
@@ -68,7 +68,9 @@ describe('Whisk & Layers Backend Functional & Security Test Suite', () => {
     expect(res.data.success).toBe(true);
     expect(res.data.data.token).toBeDefined();
     expect(res.data.data.user.role).toBe('CUSTOMER');
-    expect(res.data.data.user.password_hash).toBeUndefined(); // Security: never leak password hash
+    expect(res.data.data.user.full_name).toBe('Aditya Nair');
+    expect(res.data.data.user.phone).toBe('+91 9876543210');
+    expect(res.data.data.user.password_hash).toBeUndefined();
 
     customerToken = res.data.data.token;
     customerId = res.data.data.user.id;
@@ -121,6 +123,8 @@ describe('Whisk & Layers Backend Functional & Security Test Suite', () => {
     const bakeriesRes = await makeRequest('/api/bakeries');
     expect(bakeriesRes.status).toBe(200);
     expect(bakeriesRes.data.data.bakeries.length).toBeGreaterThanOrEqual(3);
+    const bakeryNames = bakeriesRes.data.data.bakeries.map((b: any) => b.name);
+    expect(bakeryNames).toContain('Whisk House');
 
     const cakesRes = await makeRequest('/api/cakes');
     expect(cakesRes.status).toBe(200);
@@ -131,32 +135,35 @@ describe('Whisk & Layers Backend Functional & Security Test Suite', () => {
     expect(customRes.data.data.grouped.BASE.length).toBeGreaterThan(0);
     expect(customRes.data.data.grouped.FLAVOR.length).toBeGreaterThan(0);
     expect(customRes.data.data.grouped.SIZE.length).toBeGreaterThan(0);
+    // Verify weights in Kg
+    const sizeLabels = customRes.data.data.grouped.SIZE.map((s: any) => s.label);
+    expect(sizeLabels.some((l: string) => l.includes('Kg'))).toBe(true);
   });
 
-  it('7. Order Lifecycle: Customer places custom cake order, Bakery processes to delivery', async () => {
+  it('7. Order Lifecycle: Customer places order, Bakery processes to delivery', async () => {
     const futureDate = new Date();
     futureDate.setDate(futureDate.getDate() + 5);
     const deliveryDateStr = futureDate.toISOString().split('T')[0];
 
-    // Customer places order
+    // Customer places order with Indian mobile number and PIN code address
     const createOrderRes = await makeRequest('/api/orders', {
       method: 'POST',
       token: customerToken,
       body: {
-        bakeryId: 1,
-        customerName: 'Elena Vance',
-        customerPhone: '+1 (555) 234-5678',
-        deliveryAddress: '742 Evergreen Terrace, San Francisco, CA',
+        bakeryId: bakeryId,
+        customerName: 'Aditya Nair',
+        customerPhone: '+91 9876543210',
+        deliveryAddress: 'Flat 402, Shree Residency, 150 Feet Ring Road, Near Nana Mava Circle, Rajkot, Gujarat 360005',
         deliveryDate: deliveryDateStr,
         deliveryTimeSlot: 'Morning (09:00 AM - 12:00 PM)',
-        specialInstructions: 'Handle with care',
+        specialInstructions: 'Handle with care, anniversary cake',
         items: [
           {
             cakeId: 1,
-            cakeName: 'Raspberry Pistachio Velvet Cake',
-            basePrice: 68.0,
+            cakeName: 'Dutch Chocolate Truffle Cake (100% Eggless)',
+            basePrice: 750.0,
             quantity: 1,
-            subtotal: 68.0,
+            subtotal: 750.0,
             isCustom: false,
           },
         ],
@@ -166,6 +173,7 @@ describe('Whisk & Layers Backend Functional & Security Test Suite', () => {
     expect(createOrderRes.status).toBe(201);
     const newOrder = createOrderRes.data.data;
     expect(newOrder.status).toBe('PENDING');
+    expect(newOrder.total_amount).toBeGreaterThan(750.0);
     const orderId = newOrder.id;
 
     // Bakery accepts order
@@ -211,7 +219,7 @@ describe('Whisk & Layers Backend Functional & Security Test Suite', () => {
       body: {
         orderId,
         rating: 5,
-        comment: 'Absolutely spectacular cake! Delivered on time and tasted incredible.',
+        comment: 'Superb Dutch Chocolate Truffle cake! Arrived fresh and beautifully decorated.',
       },
     });
     expect(reviewRes.status).toBe(201);
@@ -227,24 +235,24 @@ describe('Whisk & Layers Backend Functional & Security Test Suite', () => {
       method: 'POST',
       token: customerToken,
       body: {
-        bakeryId: 1,
-        customerName: 'Elena Vance',
-        customerPhone: '+1 (555) 234-5678',
-        deliveryAddress: '742 Evergreen Terrace, San Francisco, CA',
+        bakeryId: bakeryId,
+        customerName: 'Aditya Nair',
+        customerPhone: '+91 9876543210',
+        deliveryAddress: 'Flat 402, Shree Residency, 150 Feet Ring Road, Rajkot, Gujarat 360005',
         deliveryDate: deliveryDateStr,
         items: [
           {
-            cakeName: 'Custom Tower',
-            basePrice: 100.0,
+            cakeName: 'Custom Celebration Tier',
+            basePrice: 1500.0,
             quantity: 1,
-            subtotal: 100.0,
+            subtotal: 1500.0,
           },
         ],
       },
     });
     const orderId = orderRes.data.data.id;
 
-    // Attempt rejection without reason -> must fail validation
+    // Attempt rejection without reason -> must fail validation (422)
     const failRejectRes = await makeRequest(`/api/orders/${orderId}/status`, {
       method: 'PATCH',
       token: bakeryToken,
@@ -258,11 +266,54 @@ describe('Whisk & Layers Backend Functional & Security Test Suite', () => {
       token: bakeryToken,
       body: {
         status: 'REJECTED',
-        rejectionReason: 'Fully booked on this date due to wedding catering.',
+        rejectionReason: 'Fully booked on this date due to wedding catering in Ahmedabad.',
       },
     });
     expect(validRejectRes.status).toBe(200);
     expect(validRejectRes.data.data.status).toBe('REJECTED');
-    expect(validRejectRes.data.data.rejection_reason).toContain('Fully booked');
+    expect(validRejectRes.data.data.rejection_reason).toContain('wedding catering');
+  });
+
+  it('9. India-First Phone & PIN Code Validation', async () => {
+    // 9a. Registration with valid Indian 10-digit phone
+    const validReg = await makeRequest('/api/auth/register', {
+      method: 'POST',
+      body: {
+        email: `karan.${Date.now()}@example.com`,
+        password: 'Password123!',
+        fullName: 'Karan Mehta',
+        phone: '9876543210',
+        role: 'CUSTOMER',
+      },
+    });
+    expect(validReg.status).toBe(201);
+
+    // 9b. Registration with invalid phone (e.g. US 555 number) must fail
+    const invalidPhoneReg = await makeRequest('/api/auth/register', {
+      method: 'POST',
+      body: {
+        email: `invalid.${Date.now()}@example.com`,
+        password: 'Password123!',
+        fullName: 'Invalid User',
+        phone: '555-123-4567',
+        role: 'CUSTOMER',
+      },
+    });
+    expect(invalidPhoneReg.status).toBe(422);
+
+    // 9c. Bakery registration with invalid PIN code must fail
+    const invalidPinBakery = await makeRequest('/api/auth/register', {
+      method: 'POST',
+      body: {
+        email: `bakery.${Date.now()}@example.com`,
+        password: 'Password123!',
+        fullName: 'Baker Test',
+        role: 'BAKERY',
+        bakeryName: 'Test Bakery',
+        postalCode: '12', // Invalid PIN code
+        phone: '9825123456',
+      },
+    });
+    expect(invalidPinBakery.status).toBe(422);
   });
 });

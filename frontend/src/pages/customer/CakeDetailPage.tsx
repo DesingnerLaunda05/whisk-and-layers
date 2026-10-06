@@ -17,6 +17,7 @@ import {
   Plus,
   Minus,
 } from 'lucide-react';
+import { formatINR } from '../../utils/indiaConstants';
 
 export const CakeDetailPage: React.FC = () => {
   const { idOrSlug } = useParams<{ idOrSlug: string }>();
@@ -194,11 +195,18 @@ export const CakeDetailPage: React.FC = () => {
             </Link>
 
             {/* Price */}
-            <div style={{ marginBottom: '1.5rem' }}>
-              <div style={{ fontSize: '0.85rem', color: 'var(--text-light)' }}>Starting Price</div>
-              <div style={{ fontSize: '2.4rem', fontWeight: 800, color: 'var(--primary)', fontFamily: 'var(--font-serif)' }}>
-                ${cake.base_price.toFixed(2)}
+            <div style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'baseline', gap: '1rem' }}>
+              <div>
+                <div style={{ fontSize: '0.85rem', color: 'var(--text-light)' }}>Starting Price (1.0 Kg Base)</div>
+                <div style={{ fontSize: '2.4rem', fontWeight: 800, color: 'var(--primary)', fontFamily: 'var(--font-serif)' }}>
+                  {formatINR(cake.base_price)}
+                </div>
               </div>
+              {cake.name.toLowerCase().includes('eggless') && (
+                <span className="badge" style={{ backgroundColor: '#EAF5EE', color: '#2C5E43', fontSize: '0.78rem', padding: '0.3rem 0.6rem', border: '1px solid #C4E3D0' }}>
+                  🟢 100% Pure Vegetarian / Eggless
+                </span>
+              )}
             </div>
 
             {/* Description */}
@@ -215,7 +223,7 @@ export const CakeDetailPage: React.FC = () => {
             <div className="form-group" style={{ marginBottom: '1.5rem' }}>
               <label className="form-label" style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <span>Free Celebration Inscription (Optional)</span>
-                <span style={{ fontSize: '0.75rem', color: 'var(--text-light)' }}>e.g. "Happy 30th Elena!"</span>
+                <span style={{ fontSize: '0.75rem', color: 'var(--text-light)' }}>e.g. "Happy 30th Aditya!"</span>
               </label>
               <input
                 type="text"
@@ -267,7 +275,7 @@ export const CakeDetailPage: React.FC = () => {
                 style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.6rem' }}
               >
                 <ShoppingBag size={20} />
-                <span>Add Prebuilt Cake to Cart — ${(cake.base_price * quantity).toFixed(2)}</span>
+                <span>Add Prebuilt Cake to Cart — {formatINR(cake.base_price * quantity)}</span>
               </button>
 
               {cake.is_customizable === 1 && (

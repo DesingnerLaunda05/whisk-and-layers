@@ -14,7 +14,9 @@ import {
   Calendar,
   CheckCircle2,
   XCircle,
+  IndianRupee,
 } from 'lucide-react';
+import { formatINR, formatIndianDate } from '../../utils/indiaConstants';
 
 export const BakeryDashboardPage: React.FC = () => {
   const [stats, setStats] = useState<{
@@ -112,11 +114,11 @@ export const BakeryDashboardPage: React.FC = () => {
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
             <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)', fontWeight: 600 }}>Settled Revenue</span>
             <div style={{ width: '36px', height: '36px', borderRadius: '50%', backgroundColor: '#FAF5FF', color: '#7E22CE', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <DollarSign size={18} />
+              <IndianRupee size={18} />
             </div>
           </div>
           <div style={{ fontSize: '1.85rem', fontWeight: 800, color: 'var(--text-main)', fontFamily: 'var(--font-serif)' }}>
-            ${stats?.totalRevenue.toFixed(2) || '0.00'}
+            {formatINR(stats?.totalRevenue || 0)}
           </div>
           <div style={{ fontSize: '0.75rem', color: 'var(--text-light)', marginTop: '0.2rem' }}>
             Delivered cake revenue
@@ -170,11 +172,11 @@ export const BakeryDashboardPage: React.FC = () => {
                       #{order.order_number}
                     </span>
                     <StatusBadge status={order.status} size="sm" />
-                    <span style={{ fontWeight: 700, color: 'var(--primary)' }}>${order.total_amount.toFixed(2)}</span>
+                    <span style={{ fontWeight: 700, color: 'var(--primary)' }}>{formatINR(order.total_amount)}</span>
                   </div>
 
                   <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginTop: '0.35rem' }}>
-                    Customer: <strong>{order.customer_name}</strong> · Delivery Date: <strong>{order.delivery_date}</strong>
+                    Customer: <strong>{order.customer_name}</strong> · Delivery Date: <strong>{formatIndianDate(order.delivery_date)}</strong>
                   </div>
 
                   <div style={{ fontSize: '0.8rem', color: 'var(--text-light)', marginTop: '0.2rem' }}>

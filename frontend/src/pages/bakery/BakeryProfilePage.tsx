@@ -3,6 +3,7 @@ import { useAuth } from '../../context/AuthContext';
 import { bakeryApi } from '../../services/bakeryApi';
 import { useToast } from '../../context/ToastContext';
 import { Store, MapPin, Phone, Mail, Clock, Save, Image as ImageIcon } from 'lucide-react';
+import { INDIAN_STATES, INDIAN_CITIES } from '../../utils/indiaConstants';
 
 export const BakeryProfilePage: React.FC = () => {
   const { bakery, refreshProfile } = useAuth();
@@ -136,34 +137,44 @@ export const BakeryProfilePage: React.FC = () => {
         <div className="grid grid-cols-3 md-grid-cols-1" style={{ gap: '1rem' }}>
           <div className="form-group">
             <label className="form-label">City *</label>
-            <input
-              type="text"
-              required
+            <select
               className="form-control"
               value={city}
               onChange={(e) => setCity(e.target.value)}
-            />
+            >
+              {INDIAN_CITIES.map((c) => (
+                <option key={c.name} value={c.name}>
+                  {c.name}
+                </option>
+              ))}
+            </select>
           </div>
 
           <div className="form-group">
-            <label className="form-label">State *</label>
-            <input
-              type="text"
-              required
+            <label className="form-label">State / UT *</label>
+            <select
               className="form-control"
               value={state}
               onChange={(e) => setState(e.target.value)}
-            />
+            >
+              {INDIAN_STATES.map((s) => (
+                <option key={s} value={s}>
+                  {s}
+                </option>
+              ))}
+            </select>
           </div>
 
           <div className="form-group">
-            <label className="form-label">Postal Code *</label>
+            <label className="form-label">PIN Code *</label>
             <input
               type="text"
               required
+              maxLength={6}
               className="form-control"
+              placeholder="e.g. 380015"
               value={postalCode}
-              onChange={(e) => setPostalCode(e.target.value)}
+              onChange={(e) => setPostalCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
             />
           </div>
         </div>
@@ -171,11 +182,12 @@ export const BakeryProfilePage: React.FC = () => {
         {/* Contact info */}
         <div className="grid grid-cols-2 md-grid-cols-1" style={{ gap: '1rem' }}>
           <div className="form-group">
-            <label className="form-label">Contact Phone *</label>
+            <label className="form-label">Contact Mobile / Landline *</label>
             <input
               type="tel"
               required
               className="form-control"
+              placeholder="e.g. +91 9825123456"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
             />

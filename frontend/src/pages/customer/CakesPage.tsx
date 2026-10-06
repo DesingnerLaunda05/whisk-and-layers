@@ -6,6 +6,7 @@ import { Skeleton } from '../../components/ui/Skeleton';
 import { EmptyState } from '../../components/ui/EmptyState';
 import { SafeImage } from '../../components/ui/SafeImage';
 import { Search, Filter, Sparkles, Store, Clock, ArrowUpDown } from 'lucide-react';
+import { formatINR } from '../../utils/indiaConstants';
 
 export const CakesPage: React.FC = () => {
   const [cakes, setCakes] = useState<Cake[]>([]);
@@ -266,9 +267,16 @@ export const CakesPage: React.FC = () => {
                     >
                       {cake.bakery_name}
                     </Link>
-                    <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
-                      {cake.preparation_days}d prep
-                    </span>
+                    <div style={{ display: 'flex', gap: '0.4rem', alignItems: 'center' }}>
+                      {cake.name.toLowerCase().includes('eggless') && (
+                        <span style={{ fontSize: '0.65rem', backgroundColor: '#EAF5EE', color: '#2C5E43', padding: '0.1rem 0.35rem', borderRadius: '4px', fontWeight: 700 }}>
+                          🟢 Eggless
+                        </span>
+                      )}
+                      <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
+                        {cake.preparation_days}d prep
+                      </span>
+                    </div>
                   </div>
 
                   <h3 style={{ fontSize: '1.2rem', color: 'var(--text-main)', marginBottom: '0.4rem' }}>
@@ -283,7 +291,7 @@ export const CakesPage: React.FC = () => {
                     <div>
                       <span style={{ fontSize: '0.72rem', color: 'var(--text-light)', display: 'block' }}>Base Price</span>
                       <span style={{ fontWeight: 800, fontSize: '1.25rem', color: 'var(--primary)' }}>
-                        ${cake.base_price.toFixed(2)}
+                        {formatINR(cake.base_price)}
                       </span>
                     </div>
 

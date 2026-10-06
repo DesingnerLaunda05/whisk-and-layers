@@ -18,6 +18,7 @@ import {
   Check,
   Package,
 } from 'lucide-react';
+import BrandLogo from '../ui/BrandLogo';
 
 export const Navbar: React.FC = () => {
   const { user, bakery, logout, switchDemoRole } = useAuth();
@@ -68,14 +69,14 @@ export const Navbar: React.FC = () => {
           <button
             className="demo-btn"
             onClick={() => switchDemoRole('CUSTOMER')}
-            title="Switch to Elena Vance (Customer with active orders)"
+            title="Switch to Aditya Nair (Customer with active orders)"
           >
             👤 Customer Demo
           </button>
           <button
             className="demo-btn"
             onClick={() => switchDemoRole('BAKERY')}
-            title="Switch to Sweet Crust Bakery Owner"
+            title="Switch to Whisk House Bakery Owner"
           >
             🧁 Bakery Owner Demo
           </button>
@@ -99,38 +100,8 @@ export const Navbar: React.FC = () => {
       >
         <div className="container flex items-center justify-between">
           {/* Logo */}
-          <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-            <div
-              style={{
-                width: '38px',
-                height: '38px',
-                borderRadius: '10px',
-                backgroundColor: 'var(--primary)',
-                color: '#FFF',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
-              <Cake size={22} />
-            </div>
-            <div>
-              <div
-                style={{
-                  fontFamily: 'var(--font-serif)',
-                  fontSize: '1.35rem',
-                  fontWeight: 800,
-                  color: 'var(--text-main)',
-                  letterSpacing: '-0.02em',
-                  lineHeight: 1.1,
-                }}
-              >
-                Whisk & Layers
-              </div>
-              <div style={{ fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--primary)', fontWeight: 700 }}>
-                Artisan Cake Marketplace
-              </div>
-            </div>
+          <Link to="/" style={{ display: 'inline-flex', alignItems: 'center' }}>
+            <BrandLogo size={42} showText={true} />
           </Link>
 
           {/* Desktop Nav Links */}

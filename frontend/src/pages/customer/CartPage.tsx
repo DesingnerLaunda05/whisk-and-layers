@@ -14,6 +14,7 @@ import {
   Cake,
   Palette,
 } from 'lucide-react';
+import { formatINR } from '../../utils/indiaConstants';
 
 export const CartPage: React.FC = () => {
   const {
@@ -158,10 +159,10 @@ export const CartPage: React.FC = () => {
 
                     <div style={{ textAlign: 'right' }}>
                       <div style={{ fontSize: '1.2rem', fontWeight: 800, color: 'var(--primary)', fontFamily: 'var(--font-serif)' }}>
-                        ${item.subtotal.toFixed(2)}
+                        {formatINR(item.subtotal)}
                       </div>
                       <div style={{ fontSize: '0.75rem', color: 'var(--text-light)' }}>
-                        ${item.unitPrice.toFixed(2)} each
+                        {formatINR(item.unitPrice)} each
                       </div>
                     </div>
                   </div>
@@ -274,15 +275,15 @@ export const CartPage: React.FC = () => {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', fontSize: '0.9rem', marginBottom: '1.25rem' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-muted)' }}>
                 <span>Subtotal</span>
-                <span style={{ fontWeight: 600, color: 'var(--text-main)' }}>${subtotal.toFixed(2)}</span>
+                <span style={{ fontWeight: 600, color: 'var(--text-main)' }}>{formatINR(subtotal)}</span>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-muted)' }}>
                 <span>Hand Delivery Fee</span>
-                <span style={{ fontWeight: 600, color: 'var(--text-main)' }}>${deliveryFee.toFixed(2)}</span>
+                <span style={{ fontWeight: 600, color: 'var(--text-main)' }}>{formatINR(deliveryFee)}</span>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-muted)' }}>
-                <span>Estimated Tax (8.25%)</span>
-                <span style={{ fontWeight: 600, color: 'var(--text-main)' }}>${taxAmount.toFixed(2)}</span>
+                <span>GST (5%)</span>
+                <span style={{ fontWeight: 600, color: 'var(--text-main)' }}>{formatINR(taxAmount)}</span>
               </div>
 
               <div
@@ -297,7 +298,7 @@ export const CartPage: React.FC = () => {
               >
                 <span style={{ fontSize: '1.05rem', fontWeight: 700, color: 'var(--text-main)' }}>Estimated Total</span>
                 <span style={{ fontSize: '1.85rem', fontWeight: 800, color: 'var(--primary)', fontFamily: 'var(--font-serif)' }}>
-                  ${total.toFixed(2)}
+                  {formatINR(total)}
                 </span>
               </div>
             </div>

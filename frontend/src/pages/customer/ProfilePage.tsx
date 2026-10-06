@@ -5,13 +5,19 @@ import { useToast } from '../../context/ToastContext';
 import { SafeImage } from '../../components/ui/SafeImage';
 import { Link } from 'react-router-dom';
 import { User as UserIcon, Mail, Phone, Package, Save, ShieldCheck } from 'lucide-react';
+import { validateIndianPhone, normalizeIndianPhone } from '../../utils/indiaConstants';
 
 export const ProfilePage: React.FC = () => {
   const { user, refreshProfile } = useAuth();
   const { success, error } = useToast();
 
   const [fullName, setFullName] = useState<string>(user?.full_name || '');
-  const [phone, setPhone] = useState<string>(user?.phone || '');
+  const [phone, setPhone] = useState<string>(() => {
+    if (user?.phone) {
+      return user.phone.replace('+91', '').trim();
+    }
+    return '';
+  });
   const [avatarUrl, setAvatarUrl] = useState<string>(user?.avatar_url || '');
   const [saving, setSaving] = useState<boolean>(false);
 
@@ -22,11 +28,21 @@ export const ProfilePage: React.FC = () => {
       return;
     }
 
+    let normalizedPhone: string | null = null;
+    const cleanPhone = phone.replace(/\D/g, '');
+    if (cleanPhone) {
+      if (!validateIndianPhone(cleanPhone)) {
+        error('Please enter a valid 10-digit Indian mobile number (e.g. 9876543210).');
+        return;
+      }
+      normalizedPhone = normalizeIndianPhone(cleanPhone);
+    }
+
     setSaving(true);
     try {
       await authApi.updateProfile({
         fullName: fullName.trim(),
-        phone: phone.trim() || null,
+        phone: normalizedPhone,
         avatarUrl: avatarUrl.trim() || null,
       });
       await refreshProfile();
@@ -97,14 +113,35 @@ export const ProfilePage: React.FC = () => {
             </div>
 
             <div className="form-group">
-              <label className="form-label">Contact Phone</label>
-              <input
-                type="tel"
-                className="form-control"
-                placeholder="+1 (555) 000-0000"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-              />
+              <label className="form-label">Contact Mobile Number</label>
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <span
+                  style={{
+                    padding: '0.75rem 0.9rem',
+                    backgroundColor: 'var(--bg-muted)',
+                    border: '1px solid var(--border-medium)',
+                    borderRight: 'none',
+                    borderRadius: 'var(--radius-sm) 0 0 var(--radius-sm)',
+                    fontSize: '0.95rem',
+                    fontWeight: 700,
+                    color: 'var(--text-main)',
+                  }}
+                >
+                  +91
+                </span>
+                <input
+                  type="tel"
+                  maxLength={10}
+                  className="form-control"
+                  style={{ borderRadius: '0 var(--radius-sm) var(--radius-sm) 0' }}
+                  placeholder="9876543210"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value.replace(/\D/g, '').slice(0, 10))}
+                />
+              </div>
+              <small style={{ fontSize: '0.75rem', color: 'var(--text-light)', marginTop: '0.25rem', display: 'block' }}>
+                10-digit Indian mobile number
+              </small>
             </div>
 
             <div className="form-group">

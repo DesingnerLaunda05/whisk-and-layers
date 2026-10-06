@@ -5,6 +5,7 @@ import { Skeleton } from '../../components/ui/Skeleton';
 import { SafeImage } from '../../components/ui/SafeImage';
 import { useToast } from '../../context/ToastContext';
 import { Users, CheckCircle2, XCircle, Search } from 'lucide-react';
+import { formatIndianDate } from '../../utils/indiaConstants';
 
 export const AdminUsersPage: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
@@ -131,7 +132,7 @@ export const AdminUsersPage: React.FC = () => {
                     </td>
 
                     <td style={{ padding: '1rem', color: 'var(--text-light)', fontSize: '0.85rem' }}>
-                      {new Date(u.created_at).toLocaleDateString()}
+                      {formatIndianDate(u.created_at)}
                     </td>
 
                     <td style={{ padding: '1rem' }}>

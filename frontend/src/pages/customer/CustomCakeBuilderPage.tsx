@@ -20,6 +20,7 @@ import {
   Heart,
   Calendar,
 } from 'lucide-react';
+import { formatINR } from '../../utils/indiaConstants';
 
 export const CustomCakeBuilderPage: React.FC = () => {
   const [searchParams] = useSearchParams();
@@ -57,7 +58,7 @@ export const CustomCakeBuilderPage: React.FC = () => {
   const [customMessage, setCustomMessage] = useState<string>('Happy Birthday & Celebrations!');
   const [specialInstructions, setSpecialInstructions] = useState<string>('');
 
-  const baseStartingPrice = 55.0; // Artisan Custom Base baseline
+  const baseStartingPrice = 650.0; // Artisan Custom Base baseline in INR
 
   useEffect(() => {
     const initData = async () => {
@@ -144,13 +145,13 @@ export const CustomCakeBuilderPage: React.FC = () => {
 
     const price = calculateTotal();
     const customSnapshot = {
-      base: `${selectedBase?.label} (+$${selectedBase?.extra_price.toFixed(2)})`,
-      flavor: `${selectedFlavor?.label} (+$${selectedFlavor?.extra_price.toFixed(2)})`,
-      size: `${selectedSize?.label} (+$${selectedSize?.extra_price.toFixed(2)})`,
-      shape: `${selectedShape?.label} (+$${selectedShape?.extra_price.toFixed(2)})`,
-      icing: `${selectedIcing?.label} (+$${selectedIcing?.extra_price.toFixed(2)})`,
-      topping: `${selectedTopping?.label} (+$${selectedTopping?.extra_price.toFixed(2)})`,
-      decoration: `${selectedDecoration?.label} (+$${selectedDecoration?.extra_price.toFixed(2)})`,
+      base: `${selectedBase?.label}${selectedBase?.extra_price ? ` (+${formatINR(selectedBase.extra_price)})` : ''}`,
+      flavor: `${selectedFlavor?.label}${selectedFlavor?.extra_price ? ` (+${formatINR(selectedFlavor.extra_price)})` : ''}`,
+      size: `${selectedSize?.label}${selectedSize?.extra_price ? ` (+${formatINR(selectedSize.extra_price)})` : ''}`,
+      shape: `${selectedShape?.label}${selectedShape?.extra_price ? ` (+${formatINR(selectedShape.extra_price)})` : ''}`,
+      icing: `${selectedIcing?.label}${selectedIcing?.extra_price ? ` (+${formatINR(selectedIcing.extra_price)})` : ''}`,
+      topping: `${selectedTopping?.label}${selectedTopping?.extra_price ? ` (+${formatINR(selectedTopping.extra_price)})` : ''}`,
+      decoration: `${selectedDecoration?.label}${selectedDecoration?.extra_price ? ` (+${formatINR(selectedDecoration.extra_price)})` : ''}`,
       specialInstructions: specialInstructions.trim() || undefined,
     };
 
@@ -326,7 +327,7 @@ export const CustomCakeBuilderPage: React.FC = () => {
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.4rem' }}>
                         <h4 style={{ fontSize: '1.05rem', color: 'var(--text-main)' }}>{opt.label}</h4>
                         <span style={{ fontWeight: 700, color: 'var(--primary)', fontSize: '0.9rem' }}>
-                          {opt.extra_price === 0 ? 'Included' : `+$${opt.extra_price.toFixed(2)}`}
+                          {opt.extra_price === 0 ? 'Included' : `+${formatINR(opt.extra_price)}`}
                         </span>
                       </div>
                       <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: 1.5 }}>
@@ -359,7 +360,7 @@ export const CustomCakeBuilderPage: React.FC = () => {
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.4rem' }}>
                         <h4 style={{ fontSize: '1.05rem', color: 'var(--text-main)' }}>{opt.label}</h4>
                         <span style={{ fontWeight: 700, color: 'var(--primary)', fontSize: '0.9rem' }}>
-                          {opt.extra_price === 0 ? 'Included' : `+$${opt.extra_price.toFixed(2)}`}
+                          {opt.extra_price === 0 ? 'Included' : `+${formatINR(opt.extra_price)}`}
                         </span>
                       </div>
                       <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: 1.5 }}>
@@ -392,7 +393,7 @@ export const CustomCakeBuilderPage: React.FC = () => {
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.4rem' }}>
                         <h4 style={{ fontSize: '1.05rem', color: 'var(--text-main)' }}>{opt.label}</h4>
                         <span style={{ fontWeight: 700, color: 'var(--primary)', fontSize: '0.9rem' }}>
-                          {opt.extra_price === 0 ? 'Included' : `+$${opt.extra_price.toFixed(2)}`}
+                          {opt.extra_price === 0 ? 'Included' : `+${formatINR(opt.extra_price)}`}
                         </span>
                       </div>
                       <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: 1.5 }}>
@@ -427,7 +428,7 @@ export const CustomCakeBuilderPage: React.FC = () => {
                         {opt.label}
                       </div>
                       <div style={{ fontWeight: 700, color: 'var(--primary)', fontSize: '0.85rem', marginBottom: '0.4rem' }}>
-                        {opt.extra_price === 0 ? 'Standard' : `+$${opt.extra_price.toFixed(2)}`}
+                        {opt.extra_price === 0 ? 'Standard' : `+${formatINR(opt.extra_price)}`}
                       </div>
                       <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
                         {opt.description}
@@ -459,7 +460,7 @@ export const CustomCakeBuilderPage: React.FC = () => {
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.4rem' }}>
                         <h4 style={{ fontSize: '1.05rem', color: 'var(--text-main)' }}>{opt.label}</h4>
                         <span style={{ fontWeight: 700, color: 'var(--primary)', fontSize: '0.9rem' }}>
-                          {opt.extra_price === 0 ? 'Included' : `+$${opt.extra_price.toFixed(2)}`}
+                          {opt.extra_price === 0 ? 'Included' : `+${formatINR(opt.extra_price)}`}
                         </span>
                       </div>
                       <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: 1.5 }}>
@@ -492,7 +493,7 @@ export const CustomCakeBuilderPage: React.FC = () => {
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.4rem' }}>
                         <h4 style={{ fontSize: '1.05rem', color: 'var(--text-main)' }}>{opt.label}</h4>
                         <span style={{ fontWeight: 700, color: 'var(--primary)', fontSize: '0.9rem' }}>
-                          {opt.extra_price === 0 ? 'Included' : `+$${opt.extra_price.toFixed(2)}`}
+                          {opt.extra_price === 0 ? 'Included' : `+${formatINR(opt.extra_price)}`}
                         </span>
                       </div>
                       <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: 1.5 }}>
@@ -525,7 +526,7 @@ export const CustomCakeBuilderPage: React.FC = () => {
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.4rem' }}>
                         <h4 style={{ fontSize: '1.05rem', color: 'var(--text-main)' }}>{opt.label}</h4>
                         <span style={{ fontWeight: 700, color: 'var(--primary)', fontSize: '0.9rem' }}>
-                          {opt.extra_price === 0 ? 'Included' : `+$${opt.extra_price.toFixed(2)}`}
+                          {opt.extra_price === 0 ? 'Included' : `+${formatINR(opt.extra_price)}`}
                         </span>
                       </div>
                       <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: 1.5 }}>
@@ -711,7 +712,7 @@ export const CustomCakeBuilderPage: React.FC = () => {
                   style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}
                 >
                   <ShoppingBag size={20} />
-                  <span>Add Bespoke Cake to Cart — ${calculateTotal().toFixed(2)}</span>
+                  <span>Add Bespoke Cake to Cart — {formatINR(calculateTotal())}</span>
                 </button>
               )}
             </div>
@@ -748,7 +749,7 @@ export const CustomCakeBuilderPage: React.FC = () => {
                 Estimated Total
               </div>
               <div style={{ fontSize: '2.5rem', fontWeight: 800, color: 'var(--primary)', fontFamily: 'var(--font-serif)', lineHeight: 1.1 }}>
-                ${calculateTotal().toFixed(2)}
+                {formatINR(calculateTotal())}
               </div>
             </div>
 
@@ -756,48 +757,48 @@ export const CustomCakeBuilderPage: React.FC = () => {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem', fontSize: '0.85rem', marginBottom: '1.5rem' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-muted)' }}>
                 <span>Artisan Base:</span>
-                <span style={{ fontWeight: 600, color: 'var(--text-main)' }}>${baseStartingPrice.toFixed(2)}</span>
+                <span style={{ fontWeight: 600, color: 'var(--text-main)' }}>{formatINR(baseStartingPrice)}</span>
               </div>
               {selectedBase && selectedBase.extra_price > 0 && (
                 <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-muted)' }}>
                   <span>{selectedBase.name}:</span>
-                  <span style={{ fontWeight: 600, color: 'var(--primary)' }}>+${selectedBase.extra_price.toFixed(2)}</span>
+                  <span style={{ fontWeight: 600, color: 'var(--primary)' }}>+{formatINR(selectedBase.extra_price)}</span>
                 </div>
               )}
               {selectedFlavor && selectedFlavor.extra_price > 0 && (
                 <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-muted)' }}>
                   <span>{selectedFlavor.name}:</span>
-                  <span style={{ fontWeight: 600, color: 'var(--primary)' }}>+${selectedFlavor.extra_price.toFixed(2)}</span>
+                  <span style={{ fontWeight: 600, color: 'var(--primary)' }}>+{formatINR(selectedFlavor.extra_price)}</span>
                 </div>
               )}
               {selectedSize && selectedSize.extra_price > 0 && (
                 <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-muted)' }}>
                   <span>{selectedSize.name}:</span>
-                  <span style={{ fontWeight: 600, color: 'var(--primary)' }}>+${selectedSize.extra_price.toFixed(2)}</span>
+                  <span style={{ fontWeight: 600, color: 'var(--primary)' }}>+{formatINR(selectedSize.extra_price)}</span>
                 </div>
               )}
               {selectedShape && selectedShape.extra_price > 0 && (
                 <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-muted)' }}>
                   <span>{selectedShape.name}:</span>
-                  <span style={{ fontWeight: 600, color: 'var(--primary)' }}>+${selectedShape.extra_price.toFixed(2)}</span>
+                  <span style={{ fontWeight: 600, color: 'var(--primary)' }}>+{formatINR(selectedShape.extra_price)}</span>
                 </div>
               )}
               {selectedIcing && selectedIcing.extra_price > 0 && (
                 <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-muted)' }}>
                   <span>{selectedIcing.name}:</span>
-                  <span style={{ fontWeight: 600, color: 'var(--primary)' }}>+${selectedIcing.extra_price.toFixed(2)}</span>
+                  <span style={{ fontWeight: 600, color: 'var(--primary)' }}>+{formatINR(selectedIcing.extra_price)}</span>
                 </div>
               )}
               {selectedTopping && selectedTopping.extra_price > 0 && (
                 <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-muted)' }}>
                   <span>{selectedTopping.name}:</span>
-                  <span style={{ fontWeight: 600, color: 'var(--primary)' }}>+${selectedTopping.extra_price.toFixed(2)}</span>
+                  <span style={{ fontWeight: 600, color: 'var(--primary)' }}>+{formatINR(selectedTopping.extra_price)}</span>
                 </div>
               )}
               {selectedDecoration && selectedDecoration.extra_price > 0 && (
                 <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-muted)' }}>
                   <span>{selectedDecoration.name}:</span>
-                  <span style={{ fontWeight: 600, color: 'var(--primary)' }}>+${selectedDecoration.extra_price.toFixed(2)}</span>
+                  <span style={{ fontWeight: 600, color: 'var(--primary)' }}>+{formatINR(selectedDecoration.extra_price)}</span>
                 </div>
               )}
             </div>

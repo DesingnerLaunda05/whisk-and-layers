@@ -153,14 +153,14 @@ export const BakeryCakeEditPage: React.FC = () => {
 
             {/* Base Price */}
             <div className="form-group">
-              <label className="form-label">Base Price ($ USD) *</label>
+              <label className="form-label">Base Price (₹ INR) *</label>
               <input
                 type="number"
-                step="0.50"
-                min="5"
+                step="10"
+                min="100"
                 required
                 className="form-control"
-                placeholder="e.g. 68.00"
+                placeholder="e.g. 750.00"
                 value={basePrice}
                 onChange={(e) => setBasePrice(e.target.value ? parseFloat(e.target.value) : '')}
               />

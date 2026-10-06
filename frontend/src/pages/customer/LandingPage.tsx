@@ -18,6 +18,7 @@ import {
   Palette,
   CheckCircle,
 } from 'lucide-react';
+import { formatINR } from '../../utils/indiaConstants';
 
 export const LandingPage: React.FC = () => {
   const [bakeries, setBakeries] = useState<Bakery[]>([]);
@@ -181,11 +182,11 @@ export const LandingPage: React.FC = () => {
                     Featured Creation
                   </span>
                   <h3 style={{ color: '#FFF', fontSize: '1.3rem', marginBottom: '0.25rem' }}>
-                    Belgian Triple Chocolate Fudge Showstopper
+                    Dutch Chocolate Truffle Cake (100% Eggless)
                   </h3>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '0.5rem' }}>
-                    <span style={{ fontSize: '0.85rem', color: '#EBE3D8' }}>By Velvet & Layer Confectionery</span>
-                    <span style={{ fontWeight: 800, fontSize: '1.25rem', color: '#FFF' }}>$72.00</span>
+                    <span style={{ fontSize: '0.85rem', color: '#EBE3D8' }}>By Whisk House · Ahmedabad</span>
+                    <span style={{ fontWeight: 800, fontSize: '1.25rem', color: '#FFF' }}>₹750</span>
                   </div>
                 </div>
               </div>
@@ -438,7 +439,7 @@ export const LandingPage: React.FC = () => {
                     <div>
                       <span style={{ fontSize: '0.75rem', color: 'var(--text-light)', display: 'block' }}>From</span>
                       <span style={{ fontWeight: 800, fontSize: '1.15rem', color: 'var(--primary)' }}>
-                        ${cake.base_price.toFixed(2)}
+                        {formatINR(cake.base_price)}
                       </span>
                     </div>
                     <Link to={`/cakes/${cake.slug}`} className="btn btn-secondary btn-sm">
@@ -511,11 +512,11 @@ export const LandingPage: React.FC = () => {
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', color: '#EBE3D8' }}>
                   <CheckCircle size={16} color="#D4AF37" />
-                  <span>Step 3 & 4: Size Servings (6" to Tiered) & Heart/Square Contours</span>
+                  <span>Step 3 & 4: Weight in Kilograms (0.5 Kg to 3 Kg Tiered) & Heart/Square Contours</span>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', color: '#EBE3D8' }}>
                   <CheckCircle size={16} color="#D4AF37" />
-                  <span>Step 5 & 6: Swiss Meringue Buttercream, Ganache & Fresh Figs</span>
+                  <span>Step 5 & 6: Whipped Cream, Belgian Truffle Ganache & Fresh Exotic Fruits</span>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', color: '#EBE3D8' }}>
                   <CheckCircle size={16} color="#D4AF37" />

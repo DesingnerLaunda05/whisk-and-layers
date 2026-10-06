@@ -13,6 +13,7 @@ import {
   ArrowRight,
   Clock,
 } from 'lucide-react';
+import { formatINR, formatIndianDate } from '../../utils/indiaConstants';
 
 export const MyOrdersPage: React.FC = () => {
   const [orders, setOrders] = useState<Order[]>([]);
@@ -133,13 +134,13 @@ export const MyOrdersPage: React.FC = () => {
                       <StatusBadge status={order.status} size="sm" />
                     </div>
                     <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '0.2rem' }}>
-                      Placed on {new Date(order.created_at).toLocaleDateString()}
+                      Placed on {formatIndianDate(order.created_at)}
                     </div>
                   </div>
 
                   <div style={{ textAlign: 'right' }}>
                     <div style={{ fontSize: '1.4rem', fontWeight: 800, color: 'var(--primary)', fontFamily: 'var(--font-serif)' }}>
-                      ${order.total_amount.toFixed(2)}
+                      {formatINR(order.total_amount)}
                     </div>
                     <span style={{ fontSize: '0.75rem', color: 'var(--text-light)' }}>
                       {order.payment_method === 'PAY_ON_DELIVERY' ? 'Pay on Delivery' : 'Invoiced'} · {order.payment_status}
@@ -182,7 +183,7 @@ export const MyOrdersPage: React.FC = () => {
                     <div style={{ fontSize: '0.8rem', color: 'var(--text-light)', marginBottom: '0.2rem' }}>Scheduled Delivery</div>
                     <div style={{ fontWeight: 700, fontSize: '0.9rem', color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
                       <Calendar size={15} color="var(--primary)" />
-                      <span>{order.delivery_date}</span>
+                      <span>{formatIndianDate(order.delivery_date)}</span>
                     </div>
                     <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginTop: '0.2rem' }}>
                       {order.delivery_time_slot || 'Standard Window'}

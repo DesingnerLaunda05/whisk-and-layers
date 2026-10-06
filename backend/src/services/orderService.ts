@@ -44,7 +44,7 @@ export class OrderService {
         // sum option prices
         for (const val of Object.values(item.selectedOptions)) {
           if (typeof val === 'string') {
-            const match = val.match(/\+\$([\d.]+)/);
+            const match = val.match(/\+[₹$]([\d.]+)/);
             if (match) {
               itemTotal += parseFloat(match[1]);
             }
@@ -70,8 +70,8 @@ export class OrderService {
     }
 
     calculatedSubtotal = Math.round(calculatedSubtotal * 100) / 100;
-    const deliveryFee = 5.00;
-    const taxAmount = Math.round(calculatedSubtotal * 0.0825 * 100) / 100; // 8.25% standard tax
+    const deliveryFee = 80.00; // Standard local refrigerated delivery in INR
+    const taxAmount = Math.round(calculatedSubtotal * 0.05 * 100) / 100; // 5% GST on confectionery in India
     const totalAmount = Math.round((calculatedSubtotal + deliveryFee + taxAmount) * 100) / 100;
 
     const order = orderRepository.create({
@@ -96,7 +96,7 @@ export class OrderService {
       userId: bakery.user_id,
       type: 'NEW_ORDER',
       title: 'New Cake Order Received! 🎂',
-      message: `${data.customerName} placed order #${order.order_number} ($${order.total_amount.toFixed(2)}).`,
+      message: `${data.customerName} placed order #${order.order_number} (₹${order.total_amount.toLocaleString('en-IN')}).`,
       linkUrl: `/bakery/orders/${order.id}`,
     });
 

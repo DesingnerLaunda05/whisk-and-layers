@@ -6,6 +6,7 @@ import { StatusBadge } from '../../components/ui/StatusBadge';
 import { OrderTimeline } from '../../components/ui/OrderTimeline';
 import { Skeleton } from '../../components/ui/Skeleton';
 import { CheckCircle2, Store, Calendar, MapPin, Package, ArrowRight } from 'lucide-react';
+import { formatINR, formatIndianDate } from '../../utils/indiaConstants';
 
 export const OrderConfirmationPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -115,7 +116,7 @@ export const OrderConfirmationPage: React.FC = () => {
               <div style={{ fontSize: '0.8rem', color: 'var(--text-light)', marginBottom: '0.2rem' }}>Scheduled Delivery</div>
               <div style={{ fontWeight: 700, fontSize: '0.95rem', color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
                 <Calendar size={16} color="var(--primary)" />
-                <span>{order.delivery_date} ({order.delivery_time_slot || 'Standard'})</span>
+                <span>{formatIndianDate(order.delivery_date)} ({order.delivery_time_slot || 'Standard'})</span>
               </div>
             </div>
 
@@ -142,7 +143,7 @@ export const OrderConfirmationPage: React.FC = () => {
                       </div>
                     )}
                   </div>
-                  <span style={{ fontWeight: 700, color: 'var(--text-main)' }}>${item.subtotal.toFixed(2)}</span>
+                  <span style={{ fontWeight: 700, color: 'var(--text-main)' }}>{formatINR(item.subtotal)}</span>
                 </div>
               ))}
             </div>
@@ -150,7 +151,7 @@ export const OrderConfirmationPage: React.FC = () => {
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '1.25rem', paddingTop: '0.75rem' }}>
               <span style={{ fontWeight: 700, fontSize: '1.05rem', color: 'var(--text-main)' }}>Total Settled / Invoiced:</span>
               <span style={{ fontWeight: 800, fontSize: '1.6rem', color: 'var(--primary)', fontFamily: 'var(--font-serif)' }}>
-                ${order.total_amount.toFixed(2)}
+                {formatINR(order.total_amount)}
               </span>
             </div>
           </div>

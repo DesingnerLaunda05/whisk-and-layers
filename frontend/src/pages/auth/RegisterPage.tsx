@@ -2,7 +2,15 @@ import React, { useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../context/ToastContext';
-import { Cake, Store, User as UserIcon, ArrowRight } from 'lucide-react';
+import { Store, User as UserIcon, ArrowRight } from 'lucide-react';
+import { BrandLogo } from '../../components/ui/BrandLogo';
+import {
+  INDIAN_STATES,
+  INDIAN_CITIES,
+  validateIndianPhone,
+  validateIndianPin,
+  normalizeIndianPhone,
+} from '../../utils/indiaConstants';
 
 export const RegisterPage: React.FC = () => {
   const [searchParams] = useSearchParams();
@@ -18,14 +26,14 @@ export const RegisterPage: React.FC = () => {
   const [password, setPassword] = useState<string>('');
   const [phone, setPhone] = useState<string>('');
 
-  // Bakery-specific fields
+  // Bakery-specific fields (Indian defaults)
   const [bakeryName, setBakeryName] = useState<string>('');
   const [tagline, setTagline] = useState<string>('');
   const [description, setDescription] = useState<string>('');
   const [address, setAddress] = useState<string>('');
-  const [city, setCity] = useState<string>('San Francisco');
-  const [state, setState] = useState<string>('CA');
-  const [postalCode, setPostalCode] = useState<string>('94107');
+  const [city, setCity] = useState<string>('Ahmedabad');
+  const [state, setState] = useState<string>('Gujarat');
+  const [postalCode, setPostalCode] = useState<string>('380015');
 
   const [submitting, setSubmitting] = useState<boolean>(false);
 
@@ -37,21 +45,35 @@ export const RegisterPage: React.FC = () => {
       return;
     }
 
+    // Phone validation
+    const cleanPhone = phone.replace(/\D/g, '');
+    if (cleanPhone && !validateIndianPhone(cleanPhone)) {
+      error('Please enter a valid 10-digit Indian mobile number (e.g. 9876543210).');
+      return;
+    }
+
+    if (role === 'BAKERY') {
+      if (!validateIndianPin(postalCode)) {
+        error('Please enter a valid 6-digit Indian PIN Code for your bakery.');
+        return;
+      }
+    }
+
     setSubmitting(true);
     try {
       const payload: any = {
         fullName: fullName.trim(),
         email: email.trim(),
         password,
-        phone: phone.trim() || undefined,
+        phone: cleanPhone ? normalizeIndianPhone(cleanPhone) : undefined,
         role,
       };
 
       if (role === 'BAKERY') {
         payload.bakeryName = bakeryName.trim() || `${fullName.trim()}'s Bakery`;
         payload.tagline = tagline.trim() || undefined;
-        payload.description = description.trim() || 'Artisanal bakes handcrafted with passion.';
-        payload.address = address.trim() || 'Address to be updated';
+        payload.description = description.trim() || 'Artisanal celebration cakes handcrafted fresh on order.';
+        payload.address = address.trim() || 'Local Bakery Kitchen';
         payload.city = city.trim();
         payload.state = state.trim();
         payload.postalCode = postalCode.trim();
@@ -71,27 +93,15 @@ export const RegisterPage: React.FC = () => {
       <div className="container" style={{ maxWidth: '580px' }}>
         <div className="card" style={{ padding: '2.5rem' }}>
           {/* Header */}
-          <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-            <div
-              style={{
-                width: '48px',
-                height: '48px',
-                borderRadius: '12px',
-                backgroundColor: 'var(--primary-light)',
-                color: 'var(--primary)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                margin: '0 auto 0.75rem auto',
-              }}
-            >
-              <Cake size={26} />
+          <div style={{ textAlign: 'center', marginBottom: '2rem', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <div style={{ marginBottom: '0.75rem' }}>
+              <BrandLogo size="md" />
             </div>
             <h1 style={{ fontSize: '1.85rem', color: 'var(--text-main)', marginBottom: '0.35rem' }}>
               Create Your Account
             </h1>
             <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>
-              Join Whisk & Layers to order custom cakes or list your bakery storefront.
+              Join Whisk & Layers to order custom celebration cakes or list your bakery storefront across India.
             </p>
           </div>
 
@@ -163,7 +173,7 @@ export const RegisterPage: React.FC = () => {
                 type="text"
                 required
                 className="form-control"
-                placeholder="e.g. Elena Vance"
+                placeholder="e.g. Diya Patel"
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
               />
@@ -196,14 +206,32 @@ export const RegisterPage: React.FC = () => {
               </div>
 
               <div className="form-group">
-                <label className="form-label">Phone Number</label>
-                <input
-                  type="tel"
-                  className="form-control"
-                  placeholder="+1 (555) 000-0000"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                />
+                <label className="form-label">Mobile Number</label>
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                  <span
+                    style={{
+                      padding: '0.75rem 0.9rem',
+                      backgroundColor: 'var(--bg-muted)',
+                      border: '1px solid var(--border-medium)',
+                      borderRight: 'none',
+                      borderRadius: 'var(--radius-sm) 0 0 var(--radius-sm)',
+                      fontSize: '0.95rem',
+                      fontWeight: 700,
+                      color: 'var(--text-main)',
+                    }}
+                  >
+                    +91
+                  </span>
+                  <input
+                    type="tel"
+                    maxLength={10}
+                    className="form-control"
+                    style={{ borderRadius: '0 var(--radius-sm) var(--radius-sm) 0' }}
+                    placeholder="9876543210"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value.replace(/\D/g, '').slice(0, 10))}
+                  />
+                </div>
               </div>
             </div>
 
@@ -221,7 +249,7 @@ export const RegisterPage: React.FC = () => {
               >
                 <h3 style={{ fontSize: '1rem', color: 'var(--text-main)', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
                   <Store size={16} color="var(--primary)" />
-                  <span>Bakery Storefront Profile</span>
+                  <span>Bakery Storefront Profile (India)</span>
                 </h3>
 
                 <div className="form-group">
@@ -230,19 +258,19 @@ export const RegisterPage: React.FC = () => {
                     type="text"
                     required
                     className="form-control"
-                    placeholder="e.g. Sweet Crust Artisan Bakes"
+                    placeholder="e.g. The Cake Story"
                     value={bakeryName}
                     onChange={(e) => setBakeryName(e.target.value)}
                   />
                 </div>
 
                 <div className="form-group">
-                  <label className="form-label">Street Address *</label>
+                  <label className="form-label">Street Address & Landmark *</label>
                   <input
                     type="text"
                     required
                     className="form-control"
-                    placeholder="e.g. 442 Patisserie Row, Suite B"
+                    placeholder="e.g. 102 Sindhu Bhavan Road, Bodakdev"
                     value={address}
                     onChange={(e) => setAddress(e.target.value)}
                   />
@@ -251,34 +279,44 @@ export const RegisterPage: React.FC = () => {
                 <div className="grid grid-cols-3 md-grid-cols-1" style={{ gap: '0.75rem' }}>
                   <div className="form-group" style={{ margin: 0 }}>
                     <label className="form-label">City *</label>
-                    <input
-                      type="text"
-                      required
+                    <select
                       className="form-control"
                       value={city}
                       onChange={(e) => setCity(e.target.value)}
-                    />
+                    >
+                      {INDIAN_CITIES.map((c) => (
+                        <option key={c.name} value={c.name}>
+                          {c.name}
+                        </option>
+                      ))}
+                    </select>
                   </div>
 
                   <div className="form-group" style={{ margin: 0 }}>
-                    <label className="form-label">State *</label>
-                    <input
-                      type="text"
-                      required
+                    <label className="form-label">State / UT *</label>
+                    <select
                       className="form-control"
                       value={state}
                       onChange={(e) => setState(e.target.value)}
-                    />
+                    >
+                      {INDIAN_STATES.map((s) => (
+                        <option key={s} value={s}>
+                          {s}
+                        </option>
+                      ))}
+                    </select>
                   </div>
 
                   <div className="form-group" style={{ margin: 0 }}>
-                    <label className="form-label">Postal Code *</label>
+                    <label className="form-label">PIN Code *</label>
                     <input
                       type="text"
                       required
+                      maxLength={6}
                       className="form-control"
+                      placeholder="e.g. 380054"
                       value={postalCode}
-                      onChange={(e) => setPostalCode(e.target.value)}
+                      onChange={(e) => setPostalCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
                     />
                   </div>
                 </div>

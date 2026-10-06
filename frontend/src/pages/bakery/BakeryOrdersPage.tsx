@@ -19,6 +19,7 @@ import {
   Eye,
   AlertTriangle,
 } from 'lucide-react';
+import { formatINR, formatIndianDate } from '../../utils/indiaConstants';
 
 export const BakeryOrdersPage: React.FC = () => {
   const [searchParams] = useSearchParams();
@@ -170,7 +171,7 @@ export const BakeryOrdersPage: React.FC = () => {
 
                 <div style={{ textAlign: 'right' }}>
                   <span style={{ fontWeight: 800, fontSize: '1.25rem', color: 'var(--primary)', fontFamily: 'var(--font-serif)' }}>
-                    ${order.total_amount.toFixed(2)}
+                    {formatINR(order.total_amount)}
                   </span>
                   <span style={{ fontSize: '0.75rem', color: 'var(--text-light)', marginLeft: '0.5rem' }}>
                     ({order.payment_method})
@@ -200,7 +201,7 @@ export const BakeryOrdersPage: React.FC = () => {
                   <div style={{ fontSize: '0.75rem', color: 'var(--text-light)', textTransform: 'uppercase' }}>Scheduled Delivery</div>
                   <div style={{ fontWeight: 700, color: 'var(--text-main)', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
                     <Calendar size={14} color="var(--primary)" />
-                    <span>{order.delivery_date}</span>
+                    <span>{formatIndianDate(order.delivery_date)}</span>
                   </div>
                   <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>{order.delivery_time_slot || 'Standard'}</div>
                 </div>
@@ -408,7 +409,7 @@ export const BakeryOrdersPage: React.FC = () => {
                     <div key={it.id} style={{ border: '1px solid var(--border-medium)', borderRadius: '10px', padding: '0.9rem' }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: 700, color: 'var(--text-main)' }}>
                         <span>{it.quantity}x {it.cake_name}</span>
-                        <span>${it.subtotal.toFixed(2)}</span>
+                        <span>{formatINR(it.subtotal)}</span>
                       </div>
 
                       {parsedOptions && (
@@ -432,7 +433,7 @@ export const BakeryOrdersPage: React.FC = () => {
 
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid var(--border-light)', paddingTop: '1rem' }}>
               <span style={{ fontWeight: 800, fontSize: '1.3rem', color: 'var(--primary)' }}>
-                Total: ${inspectorOrder.total_amount.toFixed(2)}
+                Total: {formatINR(inspectorOrder.total_amount)}
               </span>
 
               <button

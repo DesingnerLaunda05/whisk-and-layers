@@ -47,8 +47,8 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
   const subtotal = Math.round(items.reduce((sum, item) => sum + item.unitPrice * item.quantity, 0) * 100) / 100;
-  const deliveryFee = items.length > 0 ? 5.00 : 0.00;
-  const taxAmount = Math.round(subtotal * 0.0825 * 100) / 100;
+  const deliveryFee = items.length > 0 ? 80.00 : 0.00;
+  const taxAmount = Math.round(subtotal * 0.05 * 100) / 100; // 5% GST
   const total = Math.round((subtotal + deliveryFee + taxAmount) * 100) / 100;
 
   const maxLeadDays = items.reduce((max, item) => Math.max(max, item.leadDays || 2), 2);

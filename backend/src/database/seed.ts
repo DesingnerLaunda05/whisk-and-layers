@@ -2,15 +2,30 @@ import bcrypt from 'bcryptjs';
 import { db } from './db.js';
 import { initializeSchema } from './schema.js';
 
-export async function seedDatabase() {
+export async function seedDatabase(force = false) {
   console.log('[Seed] Starting database seed...');
   await initializeSchema();
 
-  // Check if already seeded
-  const userCount = db.queryOne<{ count: number }>('SELECT COUNT(*) as count FROM users');
-  if (userCount && userCount.count > 0) {
-    console.log('[Seed] Database already contains data. Skipping seed.');
-    return;
+  if (force) {
+    console.log('[Seed] Force seeding requested. Clearing existing records...');
+    db.exec(`
+      DELETE FROM notifications;
+      DELETE FROM reviews;
+      DELETE FROM order_items;
+      DELETE FROM orders;
+      DELETE FROM customization_options;
+      DELETE FROM cakes;
+      DELETE FROM cake_categories;
+      DELETE FROM bakeries;
+      DELETE FROM users;
+    `);
+  } else {
+    // Check if already seeded
+    const userCount = db.queryOne<{ count: number }>('SELECT COUNT(*) as count FROM users');
+    if (userCount && userCount.count > 0) {
+      console.log('[Seed] Database already contains data. Skipping seed.');
+      return;
+    }
   }
 
   const salt = await bcrypt.genSalt(10);
@@ -19,17 +34,17 @@ export async function seedDatabase() {
   const adminPassword = await bcrypt.hash('Admin123!', salt);
 
   db.transaction(() => {
-    // 1. Insert Users
+    // 1. Insert Users (Indian demo users)
     const customer1 = db.execute(`
       INSERT INTO users (email, password_hash, full_name, phone, role, avatar_url, is_active)
       VALUES (?, ?, ?, ?, ?, ?, 1)
     `, [
       'customer@whiskandlayers.com',
       customerPassword,
-      'Elena Vance',
-      '+1 (555) 234-5678',
+      'Aditya Nair',
+      '+91 9876543210',
       'CUSTOMER',
-      'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80'
+      'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80'
     ]);
     const customer1Id = customer1.lastInsertRowid;
 
@@ -37,24 +52,36 @@ export async function seedDatabase() {
       INSERT INTO users (email, password_hash, full_name, phone, role, avatar_url, is_active)
       VALUES (?, ?, ?, ?, ?, ?, 1)
     `, [
-      'sarah.chen@example.com',
+      'diya.patel@example.com',
       customerPassword,
-      'Sarah Chen',
-      '+1 (555) 876-5432',
+      'Diya Patel',
+      '+91 9825012345',
       'CUSTOMER',
       'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&auto=format&fit=crop&q=80'
     ]);
     const customer2Id = customer2.lastInsertRowid;
 
-    // Bakery Owners
+    const customer3 = db.execute(`
+      INSERT INTO users (email, password_hash, full_name, phone, role, avatar_url, is_active)
+      VALUES (?, ?, ?, ?, ?, ?, 1)
+    `, [
+      'aarav.shah@example.com',
+      customerPassword,
+      'Aarav Shah',
+      '+91 9123456789',
+      'CUSTOMER',
+      'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80'
+    ]);
+
+    // Bakery Owners (Fictional Indian Bakery Entrepreneurs)
     const bakeryOwner1 = db.execute(`
       INSERT INTO users (email, password_hash, full_name, phone, role, avatar_url, is_active)
       VALUES (?, ?, ?, ?, ?, ?, 1)
     `, [
       'sweetcrust@whiskandlayers.com',
       bakeryPassword,
-      'Marcus & Chloe Laurent',
-      '+1 (555) 345-6789',
+      'Priya & Rohan Joshi',
+      '+91 9825123456',
       'BAKERY',
       'https://images.unsplash.com/photo-1577219491135-ce391730fb2c?w=150&auto=format&fit=crop&q=80'
     ]);
@@ -66,8 +93,8 @@ export async function seedDatabase() {
     `, [
       'velvetlayer@whiskandlayers.com',
       bakeryPassword,
-      'Amara Okafor',
-      '+1 (555) 456-7890',
+      'Ananya Desai',
+      '+91 9909988776',
       'BAKERY',
       'https://images.unsplash.com/photo-1583394293214-28ded15ee548?w=150&auto=format&fit=crop&q=80'
     ]);
@@ -79,10 +106,10 @@ export async function seedDatabase() {
     `, [
       'goldenwhisk@whiskandlayers.com',
       bakeryPassword,
-      'Julian Moreau',
-      '+1 (555) 567-8901',
+      'Rahul Shah',
+      '+91 9898123456',
       'BAKERY',
-      'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80'
+      'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80'
     ]);
     const bakeryOwner3Id = bakeryOwner3.lastInsertRowid;
 
@@ -94,32 +121,32 @@ export async function seedDatabase() {
       'admin@whiskandlayers.com',
       adminPassword,
       'Platform Administrator',
-      '+1 (555) 000-1122',
+      '+91 9800011223',
       'ADMIN',
       'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&auto=format&fit=crop&q=80'
     ]);
 
-    // 2. Insert Bakeries
+    // 2. Insert Bakeries (Fictional Indian Artisan Bakeries)
     const bakery1 = db.execute(`
       INSERT INTO bakeries (user_id, name, slug, tagline, description, address, city, state, postal_code, phone, email, logo_url, banner_url, specialties, rating_avg, review_count, is_approved, is_active, minimum_lead_days)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, 1, ?)
     `, [
       bakeryOwner1Id,
-      'Sweet Crust Artisan Bakes',
-      'sweet-crust-artisan-bakes',
-      'French-inspired layered confectionery & bespoke wedding towers',
-      'Founded by pastry chef Marcus Laurent in 2018, Sweet Crust specializes in botanical buttercream styling, multi-tier wedding cakes, and all-natural fruit compote fillings made fresh daily.',
-      '442 Patisserie Row, Suite B',
-      'San Francisco',
-      'CA',
-      '94107',
-      '+1 (555) 345-6789',
-      'sweetcrust@whiskandlayers.com',
+      'Whisk House',
+      'whisk-house',
+      'French-inspired layered confectionery & bespoke celebration cakes',
+      'Founded in Bodakdev, Ahmedabad, Whisk House specializes in pure Belgian chocolate truffle creations, royal rasmalai celebration tiers, and 100% eggless gourmet patisserie made fresh daily.',
+      '402 Bodakdev Galleria, Sindhu Bhavan Road',
+      'Ahmedabad',
+      'Gujarat',
+      '380054',
+      '+91 9825123456',
+      'whiskhouse@whiskandlayers.com',
       'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=300&auto=format&fit=crop&q=80',
       'https://images.unsplash.com/photo-1517433670267-08bbd4be890f?w=1200&auto=format&fit=crop&q=80',
-      'Layer Cakes, Wedding Towers, Botanical Buttercream, Gluten-Friendly',
+      '100% Eggless Specials, Belgian Truffle, Rasmalai Tiers, Botanical Buttercream',
       4.9,
-      48,
+      58,
       2
     ]);
     const bakery1Id = bakery1.lastInsertRowid;
@@ -129,22 +156,22 @@ export async function seedDatabase() {
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, 1, ?)
     `, [
       bakeryOwner2Id,
-      'Velvet & Layer Confectionery',
-      'velvet-and-layer',
-      'Sculpted celebration cakes & decadent chocolate artistry',
-      'Velvet & Layer blends contemporary sculptural cake art with heritage flavor profiles. Renowned for rich Belgian chocolate ganaches, whimsical birthday showpieces, and hand-piped edible pearls.',
-      '780 Kensington Blvd',
-      'Oakland',
-      'CA',
-      '94612',
-      '+1 (555) 456-7890',
-      'velvetlayer@whiskandlayers.com',
+      'The Cake Story',
+      'the-cake-story',
+      'Sculpted celebration cakes, decadent cheesecakes & fusion delights',
+      'Located near Vastrapur Lake in Ahmedabad, The Cake Story creates bespoke celebration centerpieces blending international confectionery trends with rich Indian tastes like Lotus Biscoff, Alphonso Mango, and Gulab Jamun.',
+      'Shop 14, Vastrapur Lake Arcade, Vastrapur',
+      'Ahmedabad',
+      'Gujarat',
+      '380015',
+      '+91 9909988776',
+      'thecakestory@whiskandlayers.com',
       'https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=300&auto=format&fit=crop&q=80',
       'https://images.unsplash.com/photo-1586985289688-ca3cf47d3e6e?w=1200&auto=format&fit=crop&q=80',
-      'Chocolate Artistry, Birthday Showstoppers, Custom Sculptures, Macaron Cakes',
+      'Biscoff Cheesecakes, Indian Fusion, Birthday Showstoppers, Custom Sugar Art',
       4.8,
-      36,
-      3
+      42,
+      2
     ]);
     const bakery2Id = bakery2.lastInsertRowid;
 
@@ -153,21 +180,21 @@ export async function seedDatabase() {
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, 1, ?)
     `, [
       bakeryOwner3Id,
-      'The Golden Whisk Patisserie',
-      'golden-whisk-patisserie',
-      'Organic rustic bakes, vintage lambeth piping & bespoke sponge',
-      'The Golden Whisk is dedicated to farm-fresh local dairy, organic flours, and intricate vintage Victorian piping. Every cake is custom crafted with seasonal edible blossoms.',
-      '1290 Blossom Hill Way',
-      'Berkeley',
-      'CA',
-      '94704',
-      '+1 (555) 567-8901',
-      'goldenwhisk@whiskandlayers.com',
+      'Sweet Oven',
+      'sweet-oven',
+      'Farm-fresh organic dairy bakes, vintage lambeth piping & fresh fruit cakes',
+      'Situated in Pali Hill, Bandra West, Mumbai, Sweet Oven crafts heirloom celebration cakes using rich A2 dairy, fresh seasonal Indian orchard fruits, and delicate Victorian Lambeth piping techniques.',
+      '104 Pali Hill Promenade, Bandra West',
+      'Mumbai',
+      'Maharashtra',
+      '400050',
+      '+91 9898123456',
+      'sweetoven@whiskandlayers.com',
       'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=300&auto=format&fit=crop&q=80',
       'https://images.unsplash.com/photo-1516738901171-8eb4fc13bd20?w=1200&auto=format&fit=crop&q=80',
-      'Vintage Lambeth, Organic Sponges, Edible Flowers, Vegan Options',
+      'Vintage Lambeth Piping, Fresh Mango Gateaux, Organic Dairy, Floral Styling',
       5.0,
-      29,
+      34,
       2
     ]);
     const bakery3Id = bakery3.lastInsertRowid;
@@ -176,70 +203,75 @@ export async function seedDatabase() {
     const cat1 = db.execute(`
       INSERT INTO cake_categories (name, slug, description, image_url, sort_order)
       VALUES (?, ?, ?, ?, ?)
-    `, ['Signature Layer Cakes', 'signature-layers', 'Handcrafted multi-layered cakes with house compotes and silky frostings', 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=500&auto=format&fit=crop&q=80', 1]);
+    `, ['Signature Celebration Cakes', 'signature-celebration', 'Handcrafted multi-layered cakes with gourmet compotes and silky frostings', 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=500&auto=format&fit=crop&q=80', 1]);
     const cat1Id = cat1.lastInsertRowid;
 
     const cat2 = db.execute(`
       INSERT INTO cake_categories (name, slug, description, image_url, sort_order)
       VALUES (?, ?, ?, ?, ?)
-    `, ['Custom Cake Bases', 'custom-bases', 'Blank canvas artisan bases ready for step-by-step flavor, size, and styling customization', 'https://images.unsplash.com/photo-1571115177098-24ec42ed204d?w=500&auto=format&fit=crop&q=80', 2]);
+    `, ['Custom Cake Bases', 'custom-bases', 'Blank canvas artisan bases ready for step-by-step flavor, weight, and styling customization', 'https://images.unsplash.com/photo-1571115177098-24ec42ed204d?w=500&auto=format&fit=crop&q=80', 2]);
     const cat2Id = cat2.lastInsertRowid;
 
     const cat3 = db.execute(`
       INSERT INTO cake_categories (name, slug, description, image_url, sort_order)
       VALUES (?, ?, ?, ?, ?)
-    `, ['Celebration & Birthdays', 'celebration-birthdays', 'Vibrant party centrepieces with playful toppings, drips, and sparkler toppers', 'https://images.unsplash.com/photo-1535254973040-607b474cb50d?w=500&auto=format&fit=crop&q=80', 3]);
+    `, ['Indian Fusion Specials', 'indian-fusion', 'Luxurious celebration cakes infused with Rasmalai, Gulab Jamun, Saffron, and Pistachio', 'https://images.unsplash.com/photo-1535254973040-607b474cb50d?w=500&auto=format&fit=crop&q=80', 3]);
     const cat3Id = cat3.lastInsertRowid;
 
     const cat4 = db.execute(`
       INSERT INTO cake_categories (name, slug, description, image_url, sort_order)
       VALUES (?, ?, ?, ?, ?)
-    `, ['Artisan Cheesecakes & Tarts', 'cheesecakes-tarts', 'Velvety baked cheesecakes and seasonal fruit custard tarts', 'https://images.unsplash.com/photo-1533134242443-d4fd215305ad?w=500&auto=format&fit=crop&q=80', 4]);
+    `, ['Cheesecakes & Contemporary Tortes', 'cheesecakes-tortes', 'Velvety Lotus Biscoff cheesecakes and seasonal fresh fruit gateaux', 'https://images.unsplash.com/photo-1533134242443-d4fd215305ad?w=500&auto=format&fit=crop&q=80', 4]);
     const cat4Id = cat4.lastInsertRowid;
 
-    // 4. Customization Options (8-step builder tokens)
+    // 4. Customization Options (8-step builder tokens - in INR & Kg)
     const options = [
       // BASE
-      ['Vanilla Bean Sponge', 'BASE', 'Classic Madagascar Vanilla Sponge', 'Light, fluffy sponge infused with real Bourbon vanilla bean seeds', 0.0, 1],
-      ['Rich Valrhona Chocolate', 'BASE', 'Valrhona Dark Chocolate Sponge', 'Intensely chocolatey, moist crumb with 70% dark cocoa notes', 5.0, 2],
-      ['Red Velvet Chiffon', 'BASE', 'Southern Red Velvet Sponge', 'Silky cocoa sponge with subtle buttermilk tang and deep ruby hue', 6.0, 3],
-      ['Lemon Zest Sponge', 'BASE', 'Meyer Lemon & Olive Oil Sponge', 'Zesty citrus infused crumb with cold-pressed olive oil for ultimate moisture', 6.0, 4],
+      ['Eggless Vanilla Chiffon', 'BASE', 'Classic Madagascar Vanilla Sponge', 'Light, fluffy eggless sponge infused with pure Bourbon vanilla bean extract', 0.0, 1],
+      ['Eggless Rich Dark Chocolate', 'BASE', 'Dutch Dark Chocolate Sponge', 'Intensely chocolatey, moist crumb with 70% dark cocoa notes', 100.0, 2],
+      ['Red Velvet Cocoa Chiffon', 'BASE', 'Ruby Cocoa Sponge', 'Silky cocoa sponge with delicate tang and deep ruby hue', 120.0, 3],
+      ['Cardamom & Saffron Sponge', 'BASE', 'Royal Kesar Elaichi Sponge', 'Aromatic sponge infused with Kashmiri saffron strands and fresh green cardamom', 150.0, 4],
 
       // FLAVOR / FILLING
-      ['Madagascar Vanilla Cream', 'FLAVOR', 'Whipped Vanilla Mascarpone', 'Subtle, cloud-like filling with real vanilla bean flecks', 0.0, 1],
-      ['Salted Caramel Ganache', 'FLAVOR', 'Fleur de Sel Caramel Cream', 'Handmade caramel with Maldon sea salt crystals and white chocolate ganache', 8.0, 2],
-      ['Wild Berry Compote', 'FLAVOR', 'Raspberry & Blackberry Reduction', 'Tart, vibrant slow-simmered forest berry reduction', 7.0, 3],
-      ['Espresso Hazelnut Praline', 'FLAVOR', 'Roasted Hazelnut & Espresso Ganache', 'Crunchy caramelized hazelnut praline folded into espresso cream', 9.0, 4],
+      ['Belgian Chocolate Truffle', 'FLAVOR', 'Rich Dark Chocolate Truffle', 'Decadent 55% cocoa silky ganache filling', 0.0, 1],
+      ['Royal Rasmalai Cream', 'FLAVOR', 'Saffron Milk & Pistachio Rasmalai', 'Real soft cottage cheese dumplings simmered in rich saffron-cardamom milk', 150.0, 2],
+      ['Lotus Biscoff Spread', 'FLAVOR', 'Caramelized Spiced Speculoos Cream', 'Luscious Belgian Biscoff spread with crunchy biscuit crumble', 150.0, 3],
+      ['Alphonso Mango Compote', 'FLAVOR', 'Ratnagiri Alphonso Pulp', 'Sweet, vibrant slow-simmered pure mango reduction', 120.0, 4],
+      ['Butterscotch Praline Crunch', 'FLAVOR', 'Golden Cashew Praline & Caramel', 'Handmade crunchy cashew praline with creamy caramel sauce', 100.0, 5],
+      ['Fresh Strawberry Compote', 'FLAVOR', 'Mahabaleshwar Strawberry Coulis', 'Fresh organic strawberry reduction with balanced sweetness', 100.0, 6],
 
-      // SIZE
-      ['Small (6 inch)', 'SIZE', '6" Round (Serves 6–8)', 'Perfect for intimate gatherings, dinner parties, and milestones', 0.0, 1],
-      ['Medium (8 inch)', 'SIZE', '8" Round (Serves 12–16)', 'Our most popular size for birthday parties and family celebrations', 20.0, 2],
-      ['Large (10 inch)', 'SIZE', '10" Round (Serves 22–28)', 'Generous crowd-pleaser for corporate events and larger parties', 45.0, 3],
-      ['Two-Tier (6" + 8")', 'SIZE', 'Two-Tiered Tower (Serves 30–40)', 'Showstopping celebration cake with structural dowels and elegance', 85.0, 4],
+      // SIZE (Strictly in Kilograms for Indian market)
+      ['0.5 Kg', 'SIZE', '0.5 Kg (Serves 3–4)', 'Ideal for intimate birthdays, dates, and cozy milestones', 0.0, 1],
+      ['1.0 Kg', 'SIZE', '1.0 Kg (Serves 6–8)', 'Our most popular size for family celebrations and dinner parties', 400.0, 2],
+      ['1.5 Kg', 'SIZE', '1.5 Kg (Serves 10–12)', 'Perfect for lively milestone parties and joyful gatherings', 750.0, 3],
+      ['2.0 Kg', 'SIZE', '2.0 Kg (Serves 14–16)', 'Generous celebration cake for larger family events', 1100.0, 4],
+      ['3.0 Kg (2-Tier)', 'SIZE', '3.0 Kg Two-Tier Tower (Serves 22–26)', 'Showstopping tiered celebration centerpiece with structural support', 1800.0, 5],
 
       // SHAPE
-      ['Classic Round', 'SHAPE', 'Traditional Round', 'Timeless symmetrical shape with clean vertical edges', 0.0, 1],
-      ['Vintage Heart', 'SHAPE', 'Romantic Sweetheart', 'Charming scalloped heart contour inspired by Parisian tea rooms', 8.0, 2],
-      ['Square Architectural', 'SHAPE', 'Modern Sharp Square', 'Contemporary crisp 90-degree corners for an editorial look', 10.0, 3],
+      ['Classic Round', 'SHAPE', 'Traditional Symmetrical Round', 'Timeless symmetrical shape with clean vertical edges', 0.0, 1],
+      ['Romantic Heart', 'SHAPE', 'Sweetheart Contour', 'Charming scalloped heart contour for anniversaries and birthdays', 100.0, 2],
+      ['Contemporary Square', 'SHAPE', 'Modern Crisp Square', 'Contemporary crisp 90-degree corners for a modern aesthetic', 80.0, 3],
+      ['Tall Arch / Cylinder', 'SHAPE', 'Editorial Arch Profile', 'Dramatic tall cake profile with sleek European lines', 150.0, 4],
 
       // ICING / FROSTING
-      ['Swiss Meringue Buttercream', 'ICING', 'Silky Swiss Meringue (Ivory)', 'Ultra-smooth, velvety buttercream with balanced sweetness', 0.0, 1],
-      ['Cream Cheese Frosting', 'ICING', 'Whipped Cream Cheese Frosting', 'Lightly tangy, luscious frosting whipped to silky perfection', 5.0, 2],
-      ['Belgian Dark Chocolate Ganache', 'ICING', 'Fudge Gloss Chocolate Ganache', 'Decadent pourable ganache with mirror shine and rich cocoa finish', 8.0, 3],
-      ['Rustic Naked Frosting', 'ICING', 'Semi-Naked Crumb Coat', 'Subtle frosting wash exposing the organic cake sponge texture', 0.0, 4],
+      ['Light Whipped Cream', 'ICING', 'Whipped Dairy Cream (Fresh & Light)', 'Airy, silky whipped cream with balanced sweetness', 0.0, 1],
+      ['Belgian Dark Chocolate Ganache', 'ICING', 'Silky Gloss Chocolate Ganache', 'Decadent pourable ganache with mirror gloss and deep cocoa finish', 150.0, 2],
+      ['Cream Cheese Frosting', 'ICING', 'Whipped Cream Cheese Frosting', 'Tangy, luscious frosting whipped to silky perfection', 180.0, 3],
+      ['Swiss Meringue Buttercream', 'ICING', 'Silky Velvet Buttercream', 'Ultra-smooth, velvet frosting ideal for sharp edges and vintage piping', 120.0, 4],
 
       // TOPPINGS
-      ['Fresh Seasonal Berries', 'TOPPING', 'Fresh Organic Berries & Figs', 'Hand-selected raspberries, blackberries, blueberries, and figs', 12.0, 1],
-      ['French Macaron Assortment', 'TOPPING', 'Crisp French Macarons (6 pcs)', 'Color-coordinated almond macarons with delicate ganache centers', 14.0, 2],
-      ['Gold Leaf Accents', 'TOPPING', '24k Edible Gold Leaf Flakes', 'Hand-applied edible gold leaf across the cake crown and borders', 15.0, 3],
-      ['Caramel Drip & Pretzels', 'TOPPING', 'Salted Butter Caramel Drip', 'Dramatic slow drizzle down the sides with chocolate covered pretzels', 9.0, 4],
-      ['No Extra Toppings', 'TOPPING', 'Clean Minimalist Crown', 'Clean top finish ready for custom piped messages or candles', 0.0, 5],
+      ['Roasted Almond & Pistachio Flakes', 'TOPPING', 'Shaved Dry Fruits & Saffron', 'Premium hand-sliced Mamra almonds and Iranian green pistachios', 80.0, 1],
+      ['Exotic Fresh Fruits', 'TOPPING', 'Fresh Kiwi, Berries & Dragon Fruit', 'Handpicked colorful tropical fruits cut fresh on delivery day', 150.0, 2],
+      ['Belgian Chocolate Curls', 'TOPPING', 'Dual Milk & Dark Chocolate Curls', 'Artisan chocolate bark shavings layered across the crown', 100.0, 3],
+      ['Crushed Lotus Biscoff Crumbs', 'TOPPING', 'Caramelized Biscuit Crumble', 'Crunchy Biscoff cookies crushed over silky spread drip', 120.0, 4],
+      ['Ferrero Rocher & Macaron Trio', 'TOPPING', 'Gold-Dusted Chocolates & Macarons', 'Whole Ferrero Rocher pralines paired with almond French macarons', 250.0, 5],
+      ['No Extra Toppings', 'TOPPING', 'Clean Minimalist Crown', 'Clean top finish ready for custom hand-piped messages or candles', 0.0, 6],
 
       // DECORATION STYLE
-      ['Victorian Vintage Lambeth', 'DECORATION', 'Vintage Lambeth Scrollwork & Pearls', 'Intricate multi-tier ruffled piping with sugar pearl embellishments', 15.0, 1],
-      ['Botanical Meadow', 'DECORATION', 'Organic Pressed Edible Flowers', 'Artfully arranged pansies, cornflowers, and seasonal dried botanicals', 12.0, 2],
-      ['Modern Textured Palette Knife', 'DECORATION', 'Abstract Textured Stucco', 'Contemporary artistic swipes of tinted buttercream with modern edge', 8.0, 3],
-      ['Minimalist Clean Border', 'DECORATION', 'Clean Tailored Border', 'Refined single beaded base and top border with understated elegance', 0.0, 4],
+      ['Vintage Lambeth Borders', 'DECORATION', 'Victorian Vintage Lambeth Scrollwork', 'Intricate multi-tier ruffled piping with sugar pearl embellishments', 150.0, 1],
+      ['24K Edible Gold Leaf & Rose Petals', 'DECORATION', 'Pure Gold Leaf & Organic Dried Roses', 'Artfully placed 24k edible gold foil with fragrant dried red rose petals', 200.0, 2],
+      ['Minimalist Floral Piping', 'DECORATION', 'Delicate Buttercream Blossoms', 'Understated pastel buttercream rosettes and delicate foliage', 100.0, 3],
+      ['Artisan Chocolate Drip & Pearls', 'DECORATION', 'Glossy Drip with Shimmer Pearls', 'Slow cocoa drip along the borders with edible pearlescent beads', 120.0, 4],
     ];
 
     for (const opt of options) {
@@ -249,22 +281,22 @@ export async function seedDatabase() {
       `, opt);
     }
 
-    // 5. Cakes
+    // 5. Cakes (Realistic Indian Artisan Catalog in INR)
     const cake1 = db.execute(`
       INSERT INTO cakes (bakery_id, category_id, name, slug, description, base_price, preparation_days, image_url, gallery_urls, is_customizable, is_available)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1)
     `, [
       bakery1Id,
       cat1Id,
-      'Raspberry Pistachio Velvet Cake',
-      'raspberry-pistachio-velvet',
-      'Four layers of moist Sicilian pistachio sponge layered with tart homemade raspberry compote and coated with Madagascar vanilla Swiss meringue buttercream. Finished with fresh raspberries and crushed emerald pistachios.',
-      68.0,
-      2,
-      'https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=800&auto=format&fit=crop&q=80',
+      'Dutch Chocolate Truffle Cake (100% Eggless)',
+      'dutch-chocolate-truffle-cake',
+      'Four layers of moist Dutch chocolate sponge layered with 55% dark chocolate truffle ganache and coated in mirror cocoa glaze. 100% pure vegetarian and freshly baked on order.',
+      750.0,
+      1,
+      'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=800&auto=format&fit=crop&q=80',
       JSON.stringify([
-        'https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=800&auto=format&fit=crop&q=80',
-        'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=800&auto=format&fit=crop&q=80'
+        'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=800&auto=format&fit=crop&q=80',
+        'https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=800&auto=format&fit=crop&q=80'
       ]),
       1
     ]);
@@ -275,11 +307,11 @@ export async function seedDatabase() {
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1)
     `, [
       bakery1Id,
-      cat1Id,
-      'Earl Grey & Lavender Honey Cake',
-      'earl-grey-lavender-honey',
-      'Infused with fragrant Bergamot Earl Grey tea leaves, filled with raw wildflower honey buttercream, and topped with delicate French lavender buds.',
-      64.0,
+      cat3Id,
+      'Royal Rasmalai Tres Leches Cake',
+      'royal-rasmalai-tres-leches',
+      'Soft cardamom chiffon sponge soaked in rich saffron milk (rabdi), filled with tender rasmalai chunks, and crowned with slivered pistachios and dried rose petals.',
+      950.0,
       2,
       'https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?w=800&auto=format&fit=crop&q=80',
       null,
@@ -293,9 +325,9 @@ export async function seedDatabase() {
       bakery1Id,
       cat2Id,
       'Bespoke Artisan Canvas (Build Your Own)',
-      'sweet-crust-bespoke-canvas',
-      'Start with our award-winning sponge foundation and customize every detail: sponges, fillings, size, Lambeth piping, botanical decor, and custom hand-lettered message.',
-      55.0,
+      'whisk-house-bespoke-canvas',
+      'Start with our signature foundation and personalize every element: sponge, gourmet filling, weight in kilograms, vintage Lambeth piping, and custom hand-lettered message.',
+      600.0,
       2,
       'https://images.unsplash.com/photo-1542826438-bd32f43d626f?w=800&auto=format&fit=crop&q=80',
       null,
@@ -307,30 +339,30 @@ export async function seedDatabase() {
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1)
     `, [
       bakery1Id,
-      cat4Id,
-      'Burnt Basque Honey Fig Cheesecake',
-      'burnt-basque-fig-cheesecake',
-      'Caramelized Spanish-style baked cheesecake with an unctuous molten center, drizzled with clover honey and crowned with sliced Mission figs.',
-      52.0,
+      cat1Id,
+      'Classic Black Forest Cake (Eggless)',
+      'classic-black-forest-cake',
+      'Traditional chocolate sponge infused with sweet cherry reduction, whipped cream, Belgian chocolate shavings, and whole maraschino cherries.',
+      650.0,
       1,
-      'https://images.unsplash.com/photo-1533134242443-d4fd215305ad?w=800&auto=format&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=800&auto=format&fit=crop&q=80',
       null,
-      0
+      1
     ]);
 
-    // Bakery 2 Cakes (Velvet & Layer)
+    // Bakery 2 Cakes (The Cake Story)
     const cake5 = db.execute(`
       INSERT INTO cakes (bakery_id, category_id, name, slug, description, base_price, preparation_days, image_url, gallery_urls, is_customizable, is_available)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1)
     `, [
       bakery2Id,
-      cat1Id,
-      'Belgian Triple Chocolate Fudge Showstopper',
-      'belgian-triple-chocolate-fudge',
-      'Decadent dark chocolate sponge layered with 70% Callebaut dark ganache and milk chocolate mousse, coated in silky chocolate mirror glaze and topped with handmade cocoa truffles.',
-      72.0,
-      3,
-      'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=800&auto=format&fit=crop&q=80',
+      cat4Id,
+      'Lotus Biscoff Baked Cheesecake (Eggless)',
+      'lotus-biscoff-cheesecake',
+      'Velvety slow-baked cheesecake on a crunchy spiced Biscoff biscuit crust, generously topped with warm melted Biscoff spread and whole Belgian biscuits.',
+      1250.0,
+      1,
+      'https://images.unsplash.com/photo-1533134242443-d4fd215305ad?w=800&auto=format&fit=crop&q=80',
       null,
       1
     ]);
@@ -342,10 +374,10 @@ export async function seedDatabase() {
     `, [
       bakery2Id,
       cat3Id,
-      'Salted Caramel Pretzel Birthday Tower',
-      'salted-caramel-pretzel-tower',
-      'Fluffy brown sugar sponge filled with salted caramel buttercream, crowned with crisp caramel macarons, crunchy chocolate-dipped pretzels, and an amber caramel drip.',
-      76.0,
+      'Gulab Jamun Fusion Celebration Cake',
+      'gulab-jamun-fusion-celebration',
+      'Kesar-infused vanilla sponge soaked in rose water sugar syrup, layered with soft mini gulab jamuns and whipped cardamom cream.',
+      850.0,
       2,
       'https://images.unsplash.com/photo-1535254973040-607b474cb50d?w=800&auto=format&fit=crop&q=80',
       null,
@@ -357,13 +389,13 @@ export async function seedDatabase() {
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1)
     `, [
       bakery2Id,
-      cat2Id,
-      'Velvet Sculptural Custom Base',
-      'velvet-sculptural-custom-base',
-      'Our signature structural canvas engineered for intricate tiered styling, modern geometry, rich ganache coatings, and custom celebratory lettering.',
-      58.0,
-      3,
-      'https://images.unsplash.com/photo-1588195538326-c5b1e9f80a1b?w=800&auto=format&fit=crop&q=80',
+      cat1Id,
+      'Butterscotch Caramel Crunch Cake',
+      'butterscotch-caramel-crunch-cake',
+      'Rich golden sponge layered with house-made butterscotch crunch praline, caramel syrup, and light whipped frosting. A crowd favorite in Indian celebrations.',
+      550.0,
+      1,
+      'https://images.unsplash.com/photo-1558301211-0d8c8ddee6ec?w=800&auto=format&fit=crop&q=80',
       null,
       1
     ]);
@@ -373,29 +405,29 @@ export async function seedDatabase() {
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1)
     `, [
       bakery2Id,
-      cat3Id,
-      'Confetti Berry Funfetti Celebration',
-      'confetti-berry-funfetti-celebration',
-      'A joyful vanilla buttermilk cake loaded with natural rainbow sprinkles, filled with strawberry mousse, and coated with pastel pink buttercream.',
-      59.0,
+      cat1Id,
+      'Ferrero Rocher Hazelnut Indulgence',
+      'ferrero-rocher-hazelnut-indulgence',
+      'Dark chocolate cocoa sponge filled with roasted hazelnut Nutella mousse, topped with crunchy toasted hazelnuts and whole Ferrero Rocher chocolates.',
+      1350.0,
       2,
-      'https://images.unsplash.com/photo-1558301211-0d8c8ddee6ec?w=800&auto=format&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1588195538326-c5b1e9f80a1b?w=800&auto=format&fit=crop&q=80',
       null,
       1
     ]);
 
-    // Bakery 3 Cakes (The Golden Whisk)
+    // Bakery 3 Cakes (Sweet Oven - Mumbai)
     db.execute(`
       INSERT INTO cakes (bakery_id, category_id, name, slug, description, base_price, preparation_days, image_url, gallery_urls, is_customizable, is_available)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1)
     `, [
       bakery3Id,
       cat1Id,
-      'Vintage Victorian Strawberry Shortcake',
-      'vintage-victorian-strawberry-shortcake',
-      'Delicate golden sponge soaked in vanilla syrup, layered with Chantilly cream and fresh organic strawberries, finished with ornate Lambeth piping and edible rose petals.',
-      66.0,
-      2,
+      'Fresh Tropical Fruit Gateau (100% Eggless)',
+      'fresh-tropical-fruit-gateau',
+      'Soft vanilla chiffon sponge drenched in natural fruit nectar, layered with freshly chopped seasonal fruits (kiwi, dragon fruit, pomegranate) and light cream.',
+      800.0,
+      1,
       'https://images.unsplash.com/photo-1464349095431-e9a21285b5f3?w=800&auto=format&fit=crop&q=80',
       null,
       1
@@ -407,11 +439,11 @@ export async function seedDatabase() {
     `, [
       bakery3Id,
       cat1Id,
-      'Meyer Lemon & Blackberry Thyme Cake',
-      'lemon-blackberry-thyme',
-      'Moist olive oil sponge scented with Meyer lemon zest, filled with tart blackberry coulis and frosted in lemon-thyme cream cheese frosting.',
-      62.0,
-      2,
+      'Classic Pineapple Gateau',
+      'classic-pineapple-gateau',
+      'Evergreen Indian birthday favorite with sweet roasted pineapple chunks, cherry accents, and delicate vanilla whipped frosting.',
+      500.0,
+      1,
       'https://images.unsplash.com/photo-1519869325930-281384150729?w=800&auto=format&fit=crop&q=80',
       null,
       1
@@ -423,18 +455,18 @@ export async function seedDatabase() {
     `, [
       bakery3Id,
       cat2Id,
-      'Organic Farmstead Custom Canvas',
-      'golden-whisk-custom-canvas',
-      'Crafted with 100% organic pasture-raised dairy and heritage flours. Customize your cake size, flavors, pressed flowers, and handcrafted message.',
-      60.0,
+      'Sweet Oven Bespoke Wedding Canvas',
+      'sweet-oven-bespoke-canvas',
+      'Crafted with 100% organic farmstead dairy from Maharashtra. Choose your custom weight, flavors, Lambeth scrollwork, and handwritten message.',
+      650.0,
       2,
       'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=800&auto=format&fit=crop&q=80',
       null,
       1
     ]);
 
-    // 6. Orders
-    // Order 1: DELIVERED (Sweet Crust -> Elena)
+    // 6. Orders (with Indian delivery addresses and INR pricing)
+    // Order 1: DELIVERED (Whisk House -> Aditya)
     const ord1 = db.execute(`
       INSERT INTO orders (order_number, customer_id, bakery_id, total_amount, subtotal, delivery_fee, tax_amount, status, rejection_reason, customer_name, customer_phone, delivery_address, delivery_date, delivery_time_slot, special_instructions, payment_method, payment_status, created_at)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
@@ -442,18 +474,18 @@ export async function seedDatabase() {
       'WL-2026-8801',
       customer1Id,
       bakery1Id,
-      87.50,
-      76.00,
-      5.00,
-      6.50,
+      972.50,
+      850.00,
+      80.00,
+      42.50,
       'DELIVERED',
       null,
-      'Elena Vance',
-      '+1 (555) 234-5678',
-      '742 Evergreen Terrace, Apt 4B, San Francisco, CA 94107',
+      'Aditya Nair',
+      '+91 9876543210',
+      'Flat 402, Shree Residency, 150 Feet Ring Road, Near Nana Mava Circle, Rajkot, Gujarat 360005',
       '2026-10-01',
       'Morning (09:00 AM - 12:00 PM)',
-      'Please leave at concierge desk if no answer.',
+      'Please call upon arrival at the security gate.',
       'PAY_ON_DELIVERY',
       'PAID',
       '2026-09-28 10:15:00'
@@ -466,25 +498,25 @@ export async function seedDatabase() {
     `, [
       ord1Id,
       cake1Id,
-      'Raspberry Pistachio Velvet Cake',
-      'https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=800&auto=format&fit=crop&q=80',
-      68.0,
+      'Dutch Chocolate Truffle Cake (100% Eggless)',
+      'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=800&auto=format&fit=crop&q=80',
+      750.0,
       1,
-      76.0,
+      850.0,
       1,
-      'Happy 30th Birthday Elena!',
+      'Happy 30th Birthday Aditya!',
       JSON.stringify({
-        base: 'Vanilla Bean Sponge',
-        flavor: 'Wild Berry Compote (+$7.00)',
-        size: 'Small (6 inch)',
+        base: 'Eggless Vanilla Chiffon',
+        flavor: 'Belgian Chocolate Truffle',
+        size: '1.0 Kg',
         shape: 'Classic Round',
-        icing: 'Swiss Meringue Buttercream',
-        topping: 'Fresh Seasonal Berries (+$12.00)',
-        decoration: 'Botanical Meadow (+$12.00)'
+        icing: 'Belgian Dark Chocolate Ganache',
+        topping: 'Roasted Almond & Pistachio Flakes (+₹80.00)',
+        decoration: '24K Edible Gold Leaf & Rose Petals'
       })
     ]);
 
-    // Order 2: PREPARING (Sweet Crust -> Elena)
+    // Order 2: PREPARING (Whisk House -> Aditya)
     const ord2 = db.execute(`
       INSERT INTO orders (order_number, customer_id, bakery_id, total_amount, subtotal, delivery_fee, tax_amount, status, rejection_reason, customer_name, customer_phone, delivery_address, delivery_date, delivery_time_slot, special_instructions, payment_method, payment_status, created_at)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
@@ -492,18 +524,18 @@ export async function seedDatabase() {
       'WL-2026-8802',
       customer1Id,
       bakery1Id,
-      74.00,
-      64.00,
-      5.00,
-      5.00,
+      1130.00,
+      1000.00,
+      80.00,
+      50.00,
       'PREPARING',
       null,
-      'Elena Vance',
-      '+1 (555) 234-5678',
-      '742 Evergreen Terrace, Apt 4B, San Francisco, CA 94107',
+      'Aditya Nair',
+      '+91 9876543210',
+      'Flat 402, Shree Residency, 150 Feet Ring Road, Near Nana Mava Circle, Rajkot, Gujarat 360005',
       '2026-10-06',
       'Afternoon (01:00 PM - 04:00 PM)',
-      'Ring doorbell twice.',
+      'Keep refrigerated until evening cake cutting.',
       'PAY_ON_DELIVERY',
       'PENDING',
       '2026-10-03 14:30:00'
@@ -516,25 +548,25 @@ export async function seedDatabase() {
     `, [
       ord2Id,
       null,
-      'Bespoke Custom Cake Creation',
+      'Bespoke Artisan Cake Creation',
       'https://images.unsplash.com/photo-1542826438-bd32f43d626f?w=800&auto=format&fit=crop&q=80',
-      55.0,
+      600.0,
       1,
-      64.0,
+      1000.0,
       1,
-      'Congratulations on the New Home!',
+      'Happy Griha Pravesh!',
       JSON.stringify({
-        base: 'Lemon Zest Sponge (+$6.00)',
-        flavor: 'Madagascar Vanilla Cream',
-        size: 'Small (6 inch)',
-        shape: 'Vintage Heart (+$8.00)',
-        icing: 'Cream Cheese Frosting (+$5.00)',
-        topping: 'French Macaron Assortment (+$14.00)',
-        decoration: 'Victorian Vintage Lambeth (+$15.00)'
+        base: 'Cardamom & Saffron Sponge (+₹150.00)',
+        flavor: 'Royal Rasmalai Cream (+₹150.00)',
+        size: '1.0 Kg',
+        shape: 'Romantic Heart (+₹100.00)',
+        icing: 'Light Whipped Cream',
+        topping: 'Roasted Almond & Pistachio Flakes (+₹80.00)',
+        decoration: 'Vintage Lambeth Borders'
       })
     ]);
 
-    // Order 3: PENDING (Velvet & Layer -> Sarah)
+    // Order 3: PENDING (The Cake Story -> Diya)
     const ord3 = db.execute(`
       INSERT INTO orders (order_number, customer_id, bakery_id, total_amount, subtotal, delivery_fee, tax_amount, status, rejection_reason, customer_name, customer_phone, delivery_address, delivery_date, delivery_time_slot, special_instructions, payment_method, payment_status, created_at)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
@@ -542,18 +574,18 @@ export async function seedDatabase() {
       'WL-2026-8803',
       customer2Id,
       bakery2Id,
-      85.00,
-      72.00,
-      7.00,
-      6.00,
+      1392.50,
+      1250.00,
+      80.00,
+      62.50,
       'PENDING',
       null,
-      'Sarah Chen',
-      '+1 (555) 876-5432',
-      '120 Grand Ave, Suite 300, Oakland, CA 94612',
+      'Diya Patel',
+      '+91 9825012345',
+      'A-601, Shivalik Heights, Sindhu Bhavan Road, Bodakdev, Ahmedabad, Gujarat 380054',
       '2026-10-08',
       'Morning (10:00 AM - 01:00 PM)',
-      'Fragile packaging requested.',
+      'Handle carefully, anniversary celebration.',
       'PAY_ON_DELIVERY',
       'PENDING',
       '2026-10-04 09:00:00'
@@ -566,17 +598,17 @@ export async function seedDatabase() {
     `, [
       ord3Id,
       cake5Id,
-      'Belgian Triple Chocolate Fudge Showstopper',
-      'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=800&auto=format&fit=crop&q=80',
-      72.0,
+      'Lotus Biscoff Baked Cheesecake (Eggless)',
+      'https://images.unsplash.com/photo-1533134242443-d4fd215305ad?w=800&auto=format&fit=crop&q=80',
+      1250.0,
       1,
-      72.0,
+      1250.0,
       0,
-      'Happy Anniversary Mom & Dad!',
+      'Happy 10th Anniversary Mom & Dad!',
       null
     ]);
 
-    // Order 4: REJECTED (demonstrates rejection flow)
+    // Order 4: REJECTED (demonstrates rejection flow with reason)
     const ord4 = db.execute(`
       INSERT INTO orders (order_number, customer_id, bakery_id, total_amount, subtotal, delivery_fee, tax_amount, status, rejection_reason, customer_name, customer_phone, delivery_address, delivery_date, delivery_time_slot, special_instructions, payment_method, payment_status, created_at)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
@@ -584,15 +616,15 @@ export async function seedDatabase() {
       'WL-2026-8804',
       customer2Id,
       bakery1Id,
-      95.00,
-      82.00,
-      6.00,
-      7.00,
+      2580.00,
+      2400.00,
+      80.00,
+      100.00,
       'REJECTED',
-      'High workload due to 3 weekend weddings. Unable to take additional complex tiered orders on this date.',
-      'Sarah Chen',
-      '+1 (555) 876-5432',
-      '120 Grand Ave, Oakland, CA 94612',
+      'Fully booked for grand wedding catering orders on this auspicious date. Unable to accept additional bespoke multi-tier cakes.',
+      'Diya Patel',
+      '+91 9825012345',
+      'A-601, Shivalik Heights, Bodakdev, Ahmedabad, Gujarat 380054',
       '2026-09-30',
       'Evening (04:00 PM - 07:00 PM)',
       null,
@@ -610,19 +642,19 @@ export async function seedDatabase() {
       null,
       'Two-Tiered Bespoke Celebration Cake',
       'https://images.unsplash.com/photo-1621303837174-89787a7d4729?w=800&auto=format&fit=crop&q=80',
-      85.0,
+      1800.0,
       1,
-      82.0,
+      2400.0,
       1,
-      'Annual Company Gala 2026',
+      'Corporate Gala Celebration',
       JSON.stringify({
-        base: 'Rich Valrhona Chocolate (+$5.00)',
-        flavor: 'Espresso Hazelnut Praline (+$9.00)',
-        size: 'Two-Tier (6" + 8") (+$85.00)',
+        base: 'Eggless Rich Dark Chocolate (+₹100.00)',
+        flavor: 'Lotus Biscoff Spread (+₹150.00)',
+        size: '3.0 Kg (2-Tier) (+₹1,800.00)',
         shape: 'Classic Round',
-        icing: 'Belgian Dark Chocolate Ganache (+$8.00)',
-        topping: 'Gold Leaf Accents (+$15.00)',
-        decoration: 'Modern Textured Palette Knife (+$8.00)'
+        icing: 'Belgian Dark Chocolate Ganache (+₹150.00)',
+        topping: 'Ferrero Rocher & Macaron Trio (+₹250.00)',
+        decoration: '24K Edible Gold Leaf & Rose Petals (+₹200.00)'
       })
     ]);
 
@@ -635,8 +667,8 @@ export async function seedDatabase() {
       customer1Id,
       bakery1Id,
       5,
-      'The Raspberry Pistachio cake was breathtaking! Not only was the presentation museum-worthy with fresh berries and edible flowers, but the pistachio sponge was exceptionally moist and balanced. All our guests were asking where we ordered it!',
-      'Thank you so much Elena! It was an absolute joy baking this for your 30th birthday celebration. — Marcus & Chloe',
+      'The Dutch Chocolate Truffle cake was magnificent! 100% pure eggless yet delightfully light and moist with pure cocoa aroma. Delivery in Rajkot arrived perfectly chilled and intact. Everyone asked where we ordered it from!',
+      'Thank you so much Aditya! It was an absolute pleasure crafting this centerpiece for your celebration. — Priya & Rohan Joshi',
       '2026-10-02 11:00:00'
     ]);
 
@@ -648,7 +680,7 @@ export async function seedDatabase() {
       customer1Id,
       'ORDER_STATUS',
       'Your order is now being prepared! 🧁',
-      'Sweet Crust Artisan Bakes has begun crafting your custom cake (Order #WL-2026-8802).',
+      'Whisk House has begun crafting your custom cake (Order #WL-2026-8802).',
       '/orders/2',
       '2026-10-03 15:00:00'
     ]);
@@ -660,17 +692,17 @@ export async function seedDatabase() {
       bakeryOwner2Id,
       'NEW_ORDER',
       'New Order Received! 🍰',
-      'Sarah Chen placed order #WL-2026-8803 for Belgian Triple Chocolate Fudge Showstopper ($85.00).',
+      'Diya Patel placed order #WL-2026-8803 for Lotus Biscoff Baked Cheesecake (₹1,393).',
       '/bakery/orders/3',
       '2026-10-04 09:00:00'
     ]);
   });
 
-  console.log('[Seed] Database seeded with realistic initial records successfully!');
+  console.log('[Seed] Database seeded with realistic Indian initial records successfully!');
 }
 
 if (process.argv[1]?.endsWith('seed.ts')) {
-  seedDatabase().catch((err) => {
+  seedDatabase(true).catch((err) => {
     console.error('[Seed Error]', err);
   });
 }

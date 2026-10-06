@@ -23,6 +23,7 @@ import {
   ShieldCheck,
   CheckCircle,
 } from 'lucide-react';
+import { formatINR, formatIndianDate, formatIndianDateTime } from '../../utils/indiaConstants';
 
 export const OrderDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -142,16 +143,16 @@ export const OrderDetailPage: React.FC = () => {
                 <StatusBadge status={order.status} />
               </div>
               <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginTop: '0.35rem' }}>
-                Placed on {new Date(order.created_at).toLocaleString()}
+                Placed on {formatIndianDateTime(order.created_at)}
               </div>
             </div>
 
             <div style={{ textAlign: 'right' }}>
               <div style={{ fontSize: '1.8rem', fontWeight: 800, color: 'var(--primary)', fontFamily: 'var(--font-serif)' }}>
-                ${order.total_amount.toFixed(2)}
+                {formatINR(order.total_amount)}
               </div>
               <div style={{ fontSize: '0.8rem', color: 'var(--text-light)' }}>
-                Payment: {order.payment_method === 'PAY_ON_DELIVERY' ? 'Pay on Delivery' : 'Direct Invoice'} ({order.payment_status})
+                Payment: {order.payment_method === 'PAY_ON_DELIVERY' ? 'Pay on Delivery' : order.payment_method === 'UPI' ? 'Instant UPI' : 'Direct Invoice'} ({order.payment_status})
               </div>
             </div>
           </div>
@@ -262,7 +263,7 @@ export const OrderDetailPage: React.FC = () => {
                           <span style={{ fontSize: '0.8rem', color: 'var(--text-light)' }}>Qty: {item.quantity}</span>
                         </div>
                         <span style={{ fontWeight: 800, fontSize: '1.1rem', color: 'var(--primary)', fontFamily: 'var(--font-serif)' }}>
-                          ${item.subtotal.toFixed(2)}
+                          {formatINR(item.subtotal)}
                         </span>
                       </div>
 
@@ -303,19 +304,19 @@ export const OrderDetailPage: React.FC = () => {
             <div style={{ marginTop: '1.5rem', display: 'flex', flexDirection: 'column', gap: '0.5rem', fontSize: '0.9rem' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-muted)' }}>
                 <span>Subtotal:</span>
-                <span>${order.subtotal.toFixed(2)}</span>
+                <span>{formatINR(order.subtotal)}</span>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-muted)' }}>
-                <span>Delivery Fee:</span>
-                <span>${order.delivery_fee.toFixed(2)}</span>
+                <span>Hand Delivery Fee:</span>
+                <span>{formatINR(order.delivery_fee)}</span>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-muted)' }}>
-                <span>Tax:</span>
-                <span>${order.tax_amount.toFixed(2)}</span>
+                <span>GST (5%):</span>
+                <span>{formatINR(order.tax_amount)}</span>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', borderTop: '1px solid var(--border-medium)', paddingTop: '0.75rem', fontWeight: 800, fontSize: '1.2rem', color: 'var(--text-main)' }}>
                 <span>Total:</span>
-                <span style={{ color: 'var(--primary)', fontFamily: 'var(--font-serif)' }}>${order.total_amount.toFixed(2)}</span>
+                <span style={{ color: 'var(--primary)', fontFamily: 'var(--font-serif)' }}>{formatINR(order.total_amount)}</span>
               </div>
             </div>
           </div>
@@ -333,7 +334,7 @@ export const OrderDetailPage: React.FC = () => {
                   <div style={{ color: 'var(--text-light)', fontSize: '0.78rem' }}>Delivery Date:</div>
                   <div style={{ fontWeight: 700, color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
                     <Calendar size={15} color="var(--primary)" />
-                    <span>{order.delivery_date} ({order.delivery_time_slot || 'Standard'})</span>
+                    <span>{formatIndianDate(order.delivery_date)} ({order.delivery_time_slot || 'Standard'})</span>
                   </div>
                 </div>
 

@@ -2,6 +2,7 @@ import { userRepository } from '../repositories/userRepository.js';
 import { bakeryRepository } from '../repositories/bakeryRepository.js';
 import { hashPassword, comparePassword, generateToken } from '../utils/auth.js';
 import { UserSafe, UserRole } from '../types/index.js';
+import { normalizeIndianPhone } from '../utils/indiaConstants.js';
 
 export class AuthService {
   public async register(data: {
@@ -46,10 +47,10 @@ export class AuthService {
         tagline: data.tagline || 'Artisanal bakes made with passion',
         description: data.description || 'Welcome to our bakery on Whisk & Layers.',
         address: data.address || 'Address pending update',
-        city: data.city || 'San Francisco',
-        state: data.state || 'CA',
-        postalCode: data.postalCode || '94107',
-        phone: data.phone || '+1 (555) 000-0000',
+        city: data.city || 'Ahmedabad',
+        state: data.state || 'Gujarat',
+        postalCode: data.postalCode || '380015',
+        phone: data.phone ? normalizeIndianPhone(data.phone) : '+91 9876543210',
         email: data.email,
       });
       bakeryId = bakery.id;

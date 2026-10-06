@@ -17,6 +17,7 @@ import {
   Clock,
   Sparkles,
 } from 'lucide-react';
+import { formatINR } from '../../utils/indiaConstants';
 
 export const BakeryCakesPage: React.FC = () => {
   const { bakery } = useAuth();
@@ -137,7 +138,7 @@ export const BakeryCakesPage: React.FC = () => {
 
                     {/* Base Price */}
                     <td style={{ padding: '1rem', fontWeight: 700, color: 'var(--primary)', fontFamily: 'var(--font-serif)' }}>
-                      ${cake.base_price.toFixed(2)}
+                      {formatINR(cake.base_price)}
                     </td>
 
                     {/* Prep Time */}

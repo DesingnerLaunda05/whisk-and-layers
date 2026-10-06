@@ -1,37 +1,37 @@
 /* Whisk & Layers — Artisan Bakery Design System */
 
 :root {
-  /* Brand Palette */
-  --primary: #C85A17;
-  --primary-hover: #AF4B0E;
-  --primary-light: #FDF3EB;
-  --primary-glow: rgba(200, 90, 23, 0.15);
+  /* Brand Palette — Derived from official Whisk & Layers emblem */
+  --primary: #C93B67;
+  --primary-hover: #AF2953;
+  --primary-light: #FDF0F4;
+  --primary-glow: rgba(201, 59, 103, 0.16);
 
-  --secondary: #8B5E3C;
-  --secondary-light: #F4ECE4;
+  --secondary: #4A1E29;
+  --secondary-light: #F8EDEF;
 
   --accent-gold: #D4AF37;
   --accent-forest: #2C5E43;
   --accent-forest-light: #EBF4EF;
 
   /* Surfaces & Backgrounds */
-  --bg-app: #FDFBF7;
+  --bg-app: #FAF6F0;
   --bg-surface: #FFFFFF;
-  --bg-muted: #F8F4EE;
-  --bg-subtle: #F1EAE0;
-  --bg-dark: #20130D;
-  --bg-dark-surface: #2E1D15;
+  --bg-muted: #F5EFEB;
+  --bg-subtle: #EDE5DF;
+  --bg-dark: #220F15;
+  --bg-dark-surface: #30171F;
 
   /* Typography & Ink */
-  --text-main: #2C1810;
-  --text-muted: #6B5B53;
-  --text-light: #9B8C84;
+  --text-main: #2A1319;
+  --text-muted: #6B545A;
+  --text-light: #9C858B;
   --text-inverse: #FFFFFF;
 
   /* Borders & Dividers */
-  --border-light: #EBE3D8;
-  --border-medium: #DACFC2;
-  --border-focus: #C85A17;
+  --border-light: #EFE6DE;
+  --border-medium: #DECFC3;
+  --border-focus: #C93B67;
 
   /* Semantic Feedback */
   --success: #2C5E43;

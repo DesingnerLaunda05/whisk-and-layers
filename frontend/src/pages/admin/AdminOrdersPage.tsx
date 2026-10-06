@@ -4,6 +4,7 @@ import { Order } from '../../types';
 import { StatusBadge } from '../../components/ui/StatusBadge';
 import { Skeleton } from '../../components/ui/Skeleton';
 import { Search, Calendar } from 'lucide-react';
+import { formatINR, formatIndianDate } from '../../utils/indiaConstants';
 
 export const AdminOrdersPage: React.FC = () => {
   const [orders, setOrders] = useState<Order[]>([]);
@@ -108,11 +109,11 @@ export const AdminOrdersPage: React.FC = () => {
                     </td>
 
                     <td style={{ padding: '1rem', color: 'var(--text-muted)', fontSize: '0.85rem' }}>
-                      {o.delivery_date}
+                      {formatIndianDate(o.delivery_date)}
                     </td>
 
                     <td style={{ padding: '1rem', fontWeight: 700, color: 'var(--primary)' }}>
-                      ${o.total_amount.toFixed(2)}
+                      {formatINR(o.total_amount)}
                     </td>
 
                     <td style={{ padding: '1rem' }}>
@@ -120,7 +121,7 @@ export const AdminOrdersPage: React.FC = () => {
                     </td>
 
                     <td style={{ padding: '1rem 1.25rem', color: 'var(--text-light)', fontSize: '0.8rem' }}>
-                      {new Date(o.created_at).toLocaleDateString()}
+                      {formatIndianDate(o.created_at)}
                     </td>
                   </tr>
                 ))}

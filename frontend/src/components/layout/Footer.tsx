@@ -2,6 +2,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Cake, Heart, ShieldCheck, Truck, Sparkles } from 'lucide-react';
 
+import BrandLogo from '../ui/BrandLogo';
+
 export const Footer: React.FC = () => {
   return (
     <footer
@@ -31,8 +33,8 @@ export const Footer: React.FC = () => {
                   width: '44px',
                   height: '44px',
                   borderRadius: '50%',
-                  backgroundColor: 'rgba(200, 90, 23, 0.2)',
-                  color: '#D97736',
+                  backgroundColor: 'rgba(201, 59, 103, 0.2)',
+                  color: 'var(--primary)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -45,7 +47,7 @@ export const Footer: React.FC = () => {
                 100% Artisan Crafted
               </h4>
               <p style={{ color: '#A08E84', fontSize: '0.85rem', maxWidth: '280px' }}>
-                Every cake is made from scratch by vetted local pastry chefs using premium ingredients.
+                Every cake is made from scratch by vetted local pastry chefs across India using premium ingredients.
               </p>
             </div>
 
@@ -55,8 +57,8 @@ export const Footer: React.FC = () => {
                   width: '44px',
                   height: '44px',
                   borderRadius: '50%',
-                  backgroundColor: 'rgba(200, 90, 23, 0.2)',
-                  color: '#D97736',
+                  backgroundColor: 'rgba(201, 59, 103, 0.2)',
+                  color: 'var(--primary)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -79,8 +81,8 @@ export const Footer: React.FC = () => {
                   width: '44px',
                   height: '44px',
                   borderRadius: '50%',
-                  backgroundColor: 'rgba(200, 90, 23, 0.2)',
-                  color: '#D97736',
+                  backgroundColor: 'rgba(201, 59, 103, 0.2)',
+                  color: 'var(--primary)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -109,27 +111,11 @@ export const Footer: React.FC = () => {
           >
             {/* Col 1 */}
             <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '1rem' }}>
-                <div
-                  style={{
-                    width: '32px',
-                    height: '32px',
-                    borderRadius: '8px',
-                    backgroundColor: 'var(--primary)',
-                    color: '#FFF',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <Cake size={18} />
-                </div>
-                <span style={{ fontFamily: 'var(--font-serif)', fontSize: '1.25rem', fontWeight: 800, color: '#FFF' }}>
-                  Whisk & Layers
-                </span>
+              <div style={{ marginBottom: '1rem' }}>
+                <BrandLogo size={38} showText={true} textColor="#FFF" subtextColor="#E57399" />
               </div>
               <p style={{ color: '#A08E84', fontSize: '0.875rem', lineHeight: 1.6, marginBottom: '1rem' }}>
-                Connecting discerning dessert lovers with passionate local pastry artists for signature prebuilt bakes and bespoke custom creations.
+                Connecting discerning dessert lovers with passionate local pastry artists across India for signature prebuilt bakes and bespoke custom creations.
               </p>
             </div>
 
@@ -184,10 +170,10 @@ export const Footer: React.FC = () => {
             }}
           >
             <div>
-              © {new Date().getFullYear()} Whisk & Layers Technologies Inc. All rights reserved.
+              © {new Date().getFullYear()} Whisk & Layers India. All rights reserved.
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-              Crafted with <Heart size={14} color="#D97736" fill="#D97736" /> for dessert lovers and artisan bakers.
+              Crafted with <Heart size={14} color="var(--primary)" fill="var(--primary)" /> for dessert lovers and artisan bakers.
             </div>
           </div>
         </div>

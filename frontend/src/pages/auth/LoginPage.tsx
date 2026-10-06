@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { Cake, Sparkles, ArrowRight, UserCheck, ShieldCheck, Store, Lock } from 'lucide-react';
+import { Sparkles, ArrowRight, UserCheck, ShieldCheck, Store, Lock } from 'lucide-react';
+import { BrandLogo } from '../../components/ui/BrandLogo';
 
 export const LoginPage: React.FC = () => {
   const [searchParams] = useSearchParams();
@@ -41,7 +42,7 @@ export const LoginPage: React.FC = () => {
 
   return (
     <div style={{ padding: '3.5rem 0 5rem 0', minHeight: '80vh', display: 'flex', alignItems: 'center' }}>
-      <div className="container" style={{ maxWidth: '500px' }}>
+      <div className="container" style={{ maxWidth: '520px' }}>
         {/* Quick Demo Logins Helper Card */}
         <div
           style={{
@@ -55,10 +56,10 @@ export const LoginPage: React.FC = () => {
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: '#D4AF37', fontWeight: 700, fontSize: '0.82rem', marginBottom: '0.5rem' }}>
             <Sparkles size={14} />
-            <span>EXAMINER / DEMO 1-CLICK INSTANT LOGIN</span>
+            <span>EXAMINER / DEMO 1-CLICK INSTANT LOGIN (INDIA)</span>
           </div>
           <p style={{ fontSize: '0.78rem', color: '#A08E84', marginBottom: '0.75rem' }}>
-            Click any account role below to immediately test the platform with realistic seeded data:
+            Click any account role below to immediately test the platform with realistic Indian demo data:
           </p>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
@@ -69,7 +70,7 @@ export const LoginPage: React.FC = () => {
               style={{ backgroundColor: 'rgba(255,255,255,0.1)', color: '#FFF', justifyContent: 'flex-start', border: '1px solid rgba(255,255,255,0.15)' }}
             >
               <UserCheck size={14} color="#D4AF37" />
-              <span>Customer: Elena Vance (customer@whiskandlayers.com)</span>
+              <span>Customer: Aditya Nair (customer@whiskandlayers.com)</span>
             </button>
 
             <button
@@ -79,7 +80,7 @@ export const LoginPage: React.FC = () => {
               style={{ backgroundColor: 'rgba(255,255,255,0.1)', color: '#FFF', justifyContent: 'flex-start', border: '1px solid rgba(255,255,255,0.15)' }}
             >
               <Store size={14} color="#D97736" />
-              <span>Bakery Owner: Sweet Crust (sweetcrust@whiskandlayers.com)</span>
+              <span>Bakery: Whisk House, Ahmedabad (whiskhouse@whiskandlayers.com)</span>
             </button>
 
             <button
@@ -96,27 +97,15 @@ export const LoginPage: React.FC = () => {
 
         {/* Login Form Card */}
         <div className="card" style={{ padding: '2.25rem' }}>
-          <div style={{ textAlign: 'center', marginBottom: '1.75rem' }}>
-            <div
-              style={{
-                width: '48px',
-                height: '48px',
-                borderRadius: '12px',
-                backgroundColor: 'var(--primary-light)',
-                color: 'var(--primary)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                margin: '0 auto 0.75rem auto',
-              }}
-            >
-              <Cake size={26} />
+          <div style={{ textAlign: 'center', marginBottom: '1.75rem', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <div style={{ marginBottom: '0.75rem' }}>
+              <BrandLogo size="md" />
             </div>
             <h1 style={{ fontSize: '1.75rem', color: 'var(--text-main)', marginBottom: '0.35rem' }}>
               Welcome Back
             </h1>
             <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>
-              Sign in to manage your cake orders, customizations, or bakery storefront.
+              Sign in to manage your cake orders, customizations, or bakery storefront across India.
             </p>
           </div>
 

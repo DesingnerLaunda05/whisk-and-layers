@@ -6,10 +6,11 @@ import {
   Store,
   Cake,
   Package,
-  DollarSign,
+  IndianRupee,
   ShieldCheck,
   Activity,
 } from 'lucide-react';
+import { formatINR } from '../../utils/indiaConstants';
 
 export const AdminDashboardPage: React.FC = () => {
   const [metrics, setMetrics] = useState<any>(null);
@@ -96,11 +97,11 @@ export const AdminDashboardPage: React.FC = () => {
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.4rem' }}>
             <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)', fontWeight: 600 }}>Gross GMV</span>
             <div style={{ width: '36px', height: '36px', borderRadius: '50%', backgroundColor: '#FAF5FF', color: '#7E22CE', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <DollarSign size={18} />
+              <IndianRupee size={18} />
             </div>
           </div>
           <div style={{ fontSize: '1.85rem', fontWeight: 800, color: 'var(--text-main)', fontFamily: 'var(--font-serif)' }}>
-            ${metrics?.totalGrossRevenue.toFixed(2) || '0.00'}
+            {formatINR(metrics?.totalGrossRevenue || 0)}
           </div>
           <div style={{ fontSize: '0.75rem', color: 'var(--text-light)', marginTop: '0.2rem' }}>
             Settled volume

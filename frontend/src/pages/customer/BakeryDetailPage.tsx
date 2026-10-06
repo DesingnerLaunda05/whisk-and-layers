@@ -17,6 +17,7 @@ import {
   Cake as CakeIcon,
   ChevronRight,
 } from 'lucide-react';
+import { formatINR, formatIndianDate } from '../../utils/indiaConstants';
 
 export const BakeryDetailPage: React.FC = () => {
   const { idOrSlug } = useParams<{ idOrSlug: string }>();
@@ -309,7 +310,7 @@ export const BakeryDetailPage: React.FC = () => {
                         <div>
                           <span style={{ fontSize: '0.75rem', color: 'var(--text-light)', display: 'block' }}>Base Price</span>
                           <span style={{ fontWeight: 800, fontSize: '1.25rem', color: 'var(--primary)' }}>
-                            ${cake.base_price.toFixed(2)}
+                            {formatINR(cake.base_price)}
                           </span>
                         </div>
                         <Link to={`/cakes/${cake.slug}`} className="btn btn-primary btn-sm">
@@ -358,7 +359,7 @@ export const BakeryDetailPage: React.FC = () => {
                       <div style={{ textAlign: 'right' }}>
                         <StarRating rating={rev.rating} size={15} />
                         <div style={{ fontSize: '0.75rem', color: 'var(--text-light)', marginTop: '2px' }}>
-                          {new Date(rev.created_at).toLocaleDateString()}
+                          {formatIndianDate(rev.created_at)}
                         </div>
                       </div>
                     </div>
