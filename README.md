@@ -1,4 +1,4 @@
-# 🎂 Whisk & Layers — India-First Artisanal Customized Cake Marketplace
+# Whisk & Layers - India-First Artisanal Customized Cake Marketplace
 
 > **A modern, full-stack relational marketplace connecting dessert lovers with local artisan bakeries across India for signature gourmet recipes and bespoke customized celebration cakes.**
 > 
@@ -6,7 +6,7 @@
 
 ---
 
-## 🌟 Executive Summary & Core Purpose
+## Executive Summary & Core Purpose
 
 **Whisk & Layers** transforms how customers in India discover verified local bakeries and order handcrafted celebration cakes. Instead of confusing spreadsheets or generic forms, customers experience a warm, bakery-inspired interface with an interactive 8-step Custom Cake Studio, verified customer reviews, clear lead times, and live stage-by-stage order tracking.
 
@@ -23,9 +23,9 @@ For bakery owners across Ahmedabad, Vadodara, Rajkot, Surat, Mumbai, and top Ind
 
 ---
 
-## 🚀 Key Features
+## Key Features
 
-### 👤 Customer Experience
+### Customer Experience
 - **Bakery Discovery**: Browse local artisan bakeries in Gujarat & Maharashtra with ratings, location, minimum lead time notice, and specialty tags.
 - **Cake Catalog**: Filter by category (Signature Celebration, Custom Bases, Indian Fusion Specials, Cheesecakes & Tortes), INR price range, and customizability.
 - **Product Detail**: High-res imagery, preparation lead days, bakery kitchen provenance, quantity picker, eggless badges, and free celebration inscription notes.
@@ -44,14 +44,14 @@ For bakery owners across Ahmedabad, Vadodara, Rajkot, Surat, Mumbai, and top Ind
 - **Order Tracking**: Visual milestone progress timeline (`PENDING` ➔ `ACCEPTED` ➔ `PREPARING` ➔ `READY` ➔ `OUT_FOR_DELIVERY` ➔ `DELIVERED` or `REJECTED` with reason).
 - **Verified Reviews**: Authentic star ratings and comments restricted exclusively to customers with delivered orders.
 
-### 🧁 Bakery Owner Portal
+### Bakery Owner Portal
 - **Bakery Dashboard**: Live metric cards (Pending Approval, In Production, Completed, Settled Revenue in ₹) and urgent pending orders list.
 - **Order Management**: Accept orders or decline with mandatory reason logging. Milestone buttons (`Start Baking`, `Mark Boxed & Ready`, `Dispatch`, `Confirm Delivered`).
 - **Cake Management**: Add new cakes, upload imagery, adjust INR prices, toggle active ordering status, and edit recipe descriptions.
 - **Storefront Profile**: Update bakery brand, tagline, description, Indian address, PIN code, contact mobile, minimum lead days, and cover banners.
 - **Customer Feedback & Replies**: Read verified customer reviews and post public bakery replies.
 
-### 🛡️ Platform Administration
+### Platform Administration
 - **Governance Console**: Real-time platform metrics (total users, active bakeries, global orders, settled GMV in ₹).
 - **Bakery Moderation**: Approve or revoke bakery merchant storefronts.
 - **User Management**: Moderation of customer and bakery accounts with suspension/reactivation toggles.
@@ -59,7 +59,7 @@ For bakery owners across Ahmedabad, Vadodara, Rajkot, Surat, Mumbai, and top Ind
 
 ---
 
-## 🔑 Demo & Evaluation Accounts
+## Demo & Evaluation Accounts
 
 A convenient **1-Click Demo Switcher Bar** is pinned to the top of the header in development mode for instant evaluator access without manual typing:
 
@@ -72,7 +72,7 @@ A convenient **1-Click Demo Switcher Bar** is pinned to the top of the header in
 
 ---
 
-## 🏗️ Architecture & Technology Stack
+## Architecture & Technology Stack
 
 ### Frontend
 - **Framework**: React 18 with TypeScript
@@ -96,7 +96,7 @@ A convenient **1-Click Demo Switcher Bar** is pinned to the top of the header in
 
 ---
 
-## 📁 Repository Structure
+## Repository Structure
 
 ```
 whisk&layers/
@@ -164,7 +164,7 @@ The database initializes automatically on first run with rich realistic sample b
 
 ---
 
-## 🧪 Running Automated Tests
+## Running Automated Tests
 
 Run the backend integration and security test suite:
 
@@ -183,7 +183,7 @@ The suite validates:
 
 ---
 
-## 🌐 API Overview
+## API Overview
 
 | Method | Endpoint | Access | Description |
 |---|---|---|---|
@@ -208,5 +208,5 @@ The suite validates:
 
 ---
 
-## 📄 License & Integrity
+## License & Integrity
 Crafted for **Whisk & Layers**. All business logic, authorization checks, status transitions, and data persistence are fully implemented and production-ready.
