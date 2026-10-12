@@ -41,12 +41,23 @@ export const Cake3DViewer: React.FC<Cake3DProps> = ({
   const isDraggingRef = useRef(false);
   const previousMousePositionRef = useRef({ x: 0, y: 0 });
 
+  const [webGlSupported, setWebGlSupported] = useState<boolean>(true);
+
   // Initialize Three.js scene once
   useEffect(() => {
     if (!mountRef.current) return;
     const container = mountRef.current;
     const width = container.clientWidth || 400;
     const canvasHeight = typeof height === 'number' ? height : 420;
+
+    let renderer: THREE.WebGLRenderer;
+    try {
+      renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, failIfMajorPerformanceCaveat: false });
+    } catch (err) {
+      console.warn('WebGL is not supported or failed to initialize:', err);
+      setWebGlSupported(false);
+      return;
+    }
 
     // 1. Scene
     const scene = new THREE.Scene();
@@ -59,8 +70,7 @@ export const Cake3DViewer: React.FC<Cake3DProps> = ({
     camera.lookAt(0, 1.4, 0);
     cameraRef.current = camera;
 
-    // 3. Renderer
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    // 3. Renderer configuration
     renderer.setSize(width, canvasHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.shadowMap.enabled = true;
@@ -238,8 +248,9 @@ export const Cake3DViewer: React.FC<Cake3DProps> = ({
 
   // Rebuild 3D Cake Mesh whenever props change
   useEffect(() => {
-    if (!cakeGroupRef.current) return;
-    const group = cakeGroupRef.current;
+    if (!cakeGroupRef.current || !webGlSupported) return;
+    try {
+      const group = cakeGroupRef.current;
 
     // Clear old cake meshes
     while (group.children.length > 0) {
@@ -468,7 +479,10 @@ export const Cake3DViewer: React.FC<Cake3DProps> = ({
       plaqueMesh.rotation.x = -0.35;
       group.add(plaqueMesh);
     }
-  }, [tiers, shape, frostingColor, accentColor, toppings, inscription]);
+    } catch (meshErr) {
+      console.warn('Error constructing 3D cake meshes:', meshErr);
+    }
+  }, [tiers, shape, frostingColor, accentColor, toppings, inscription, webGlSupported]);
 
   // Camera Zoom helpers
   const handleZoomIn = () => {
@@ -512,15 +526,90 @@ export const Cake3DViewer: React.FC<Cake3DProps> = ({
           : {}),
       }}
     >
-      {/* 3D Canvas Mount */}
-      <div
-        ref={mountRef}
-        style={{
-          width: '100%',
-          height: '100%',
-          cursor: 'grab',
-        }}
-      />
+      {/* 3D Canvas Mount or 2D Fallback */}
+      {webGlSupported ? (
+        <div
+          ref={mountRef}
+          style={{
+            width: '100%',
+            height: '100%',
+            cursor: 'grab',
+          }}
+        />
+      ) : (
+        <div
+          style={{
+            width: '100%',
+            height: '100%',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '2rem 1rem',
+            position: 'relative',
+          }}
+        >
+          {/* 2D Stacked Tier Representation */}
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '3px', position: 'relative' }}>
+            {/* Candle */}
+            {toppings.includes('candle') && (
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '-2px' }}>
+                <span style={{ fontSize: '1.2rem' }}>🔥</span>
+                <div style={{ width: '6px', height: '18px', backgroundColor: '#FFF5DC', borderRadius: '2px', border: '1px solid #D4AF37' }} />
+              </div>
+            )}
+
+            {/* Top Garnishes badges */}
+            <div style={{ display: 'flex', gap: '4px', marginBottom: '4px' }}>
+              {toppings.includes('macarons') && <span>🍪</span>}
+              {toppings.includes('berries') && <span>🍓</span>}
+              {toppings.includes('gold_leaf') && <span>✨</span>}
+              {toppings.includes('flowers') && <span>🌸</span>}
+            </div>
+
+            {/* Tiers descending */}
+            {Array.from({ length: Math.min(Math.max(tiers, 1), 4) }).reverse().map((_, idx, arr) => {
+              const tierNum = arr.length - idx;
+              const widths = [130, 180, 230, 280];
+              const w = widths[tierNum - 1] || 160;
+              const radius = shape === 'ROUND' ? '20px' : shape === 'HEART' ? '28px 28px 10px 10px' : '6px';
+              return (
+                <div
+                  key={tierNum}
+                  style={{
+                    width: `${w}px`,
+                    height: '52px',
+                    backgroundColor: frostingColor,
+                    border: `3px solid ${accentColor}`,
+                    borderRadius: radius,
+                    boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    position: 'relative',
+                  }}
+                >
+                  <span style={{ fontSize: '0.72rem', fontWeight: 700, color: '#333' }}>
+                    Tier {tierNum} ({shape.toLowerCase()})
+                  </span>
+                </div>
+              );
+            })}
+
+            {/* Stand Base */}
+            <div
+              style={{
+                width: '300px',
+                height: '14px',
+                backgroundColor: '#D4AF37',
+                borderRadius: '8px',
+                boxShadow: '0 4px 8px rgba(0,0,0,0.15)',
+                marginTop: '2px',
+              }}
+            />
+          </div>
+        </div>
+      )}
 
       {/* Floating 3D Badge Overlay */}
       <div

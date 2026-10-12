@@ -102,6 +102,8 @@ const ACCENT_COLORS = [
   { name: 'Silver Shimmer', hex: '#BDC3C7' },
 ];
 
+import { MockDataStore } from '../../services/mockDataStore';
+
 export const CustomCakeBuilderPage: React.FC = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
@@ -112,10 +114,27 @@ export const CustomCakeBuilderPage: React.FC = () => {
 
   const preselectedBakeryId = searchParams.get('bakeryId') ? parseInt(searchParams.get('bakeryId')!, 10) : null;
 
-  const [loading, setLoading] = useState<boolean>(true);
+  // Immediate synchronous initialization from MockDataStore & Fallbacks - 0ms delay!
+  const [loading, setLoading] = useState<boolean>(false);
   const [groupedOptions, setGroupedOptions] = useState<Record<CustomOptionType, CustomizationOption[]>>(FALLBACK_OPTIONS);
-  const [bakeries, setBakeries] = useState<Bakery[]>([]);
-  const [selectedBakery, setSelectedBakery] = useState<Bakery | null>(null);
+  const [bakeries, setBakeries] = useState<Bakery[]>(() => {
+    try {
+      return MockDataStore.getBakeries();
+    } catch {
+      return [];
+    }
+  });
+  const [selectedBakery, setSelectedBakery] = useState<Bakery | null>(() => {
+    try {
+      const allB = MockDataStore.getBakeries();
+      if (preselectedBakeryId) {
+        return allB.find((b) => b.id === preselectedBakeryId) || allB[0] || null;
+      }
+      return allB[0] || null;
+    } catch {
+      return null;
+    }
+  });
 
   // Studio Mode: 'FREE_HAND' (complete freedom) vs 'GUIDED' (step-by-step)
   const [studioMode, setStudioMode] = useState<'FREE_HAND' | 'GUIDED'>('FREE_HAND');
@@ -130,13 +149,13 @@ export const CustomCakeBuilderPage: React.FC = () => {
   const [accentColor, setAccentColor] = useState<string>('#D4AF37');
   const [selected3DToppings, setSelected3DToppings] = useState<string[]>(['macarons', 'berries', 'gold_leaf']);
 
-  // Traditional Selections
-  const [selectedBase, setSelectedBase] = useState<CustomizationOption | null>(null);
-  const [selectedFlavor, setSelectedFlavor] = useState<CustomizationOption | null>(null);
-  const [selectedSize, setSelectedSize] = useState<CustomizationOption | null>(null);
-  const [selectedIcing, setSelectedIcing] = useState<CustomizationOption | null>(null);
-  const [selectedTopping, setSelectedTopping] = useState<CustomizationOption | null>(null);
-  const [selectedDecoration, setSelectedDecoration] = useState<CustomizationOption | null>(null);
+  // Traditional Selections - instant non-null defaults!
+  const [selectedBase, setSelectedBase] = useState<CustomizationOption | null>(FALLBACK_OPTIONS.BASE[0]);
+  const [selectedFlavor, setSelectedFlavor] = useState<CustomizationOption | null>(FALLBACK_OPTIONS.FLAVOR[0]);
+  const [selectedSize, setSelectedSize] = useState<CustomizationOption | null>(FALLBACK_OPTIONS.SIZE[1] || FALLBACK_OPTIONS.SIZE[0]);
+  const [selectedIcing, setSelectedIcing] = useState<CustomizationOption | null>(FALLBACK_OPTIONS.ICING[0]);
+  const [selectedTopping, setSelectedTopping] = useState<CustomizationOption | null>(FALLBACK_OPTIONS.TOPPING[0]);
+  const [selectedDecoration, setSelectedDecoration] = useState<CustomizationOption | null>(FALLBACK_OPTIONS.DECORATION[0]);
 
   // Personalization & Notes
   const [customCakeTitle, setCustomCakeTitle] = useState<string>('My Bespoke Celebration Cake');
@@ -154,37 +173,27 @@ export const CustomCakeBuilderPage: React.FC = () => {
 
   useEffect(() => {
     const initData = async () => {
-      setLoading(true);
       try {
         const [optRes, bakeryRes] = await Promise.all([
-          customizationApi.getOptions().catch(() => ({ grouped: FALLBACK_OPTIONS, all: [] })),
-          bakeryApi.getAll({ limit: 20 }).catch(() => ({ bakeries: [] })),
+          customizationApi.getOptions().catch(() => null),
+          bakeryApi.getAll({ limit: 20 }).catch(() => null),
         ]);
 
-        const opts = optRes?.grouped && Object.keys(optRes.grouped).length > 0 ? optRes.grouped : FALLBACK_OPTIONS;
-        setGroupedOptions(opts);
+        if (optRes?.grouped && Object.keys(optRes.grouped).length > 0) {
+          setGroupedOptions((prev) => ({ ...prev, ...optRes.grouped }));
+        }
 
         if (bakeryRes?.bakeries && bakeryRes.bakeries.length > 0) {
           setBakeries(bakeryRes.bakeries);
           if (preselectedBakeryId) {
             const match = bakeryRes.bakeries.find((b) => b.id === preselectedBakeryId);
-            setSelectedBakery(match || bakeryRes.bakeries[0]);
+            if (match) setSelectedBakery(match);
           } else {
-            setSelectedBakery(bakeryRes.bakeries[0]);
+            setSelectedBakery((prev) => prev || bakeryRes.bakeries[0]);
           }
         }
-
-        // Set initial selected options
-        if (opts.BASE?.length > 0) setSelectedBase(opts.BASE[0]);
-        if (opts.FLAVOR?.length > 0) setSelectedFlavor(opts.FLAVOR[0]);
-        if (opts.SIZE?.length > 0) setSelectedSize(opts.SIZE[1] || opts.SIZE[0]); // 1.0 kg default
-        if (opts.ICING?.length > 0) setSelectedIcing(opts.ICING[0]);
-        if (opts.TOPPING?.length > 0) setSelectedTopping(opts.TOPPING[0]);
-        if (opts.DECORATION?.length > 0) setSelectedDecoration(opts.DECORATION[0]);
       } catch (err) {
-        console.error('Failed to load customization data', err);
-      } finally {
-        setLoading(false);
+        console.warn('Background sync customization data error:', err);
       }
     };
     initData();
@@ -305,16 +314,6 @@ export const CustomCakeBuilderPage: React.FC = () => {
     success('Bespoke custom cake added to cart successfully!');
     navigate('/cart');
   };
-
-  if (loading) {
-    return (
-      <div className="container" style={{ padding: '5rem 0', textAlign: 'center' }}>
-        <Sparkles size={36} color="var(--primary)" style={{ animation: 'pulse 1.5s infinite' }} />
-        <h3 style={{ marginTop: '1rem', color: 'var(--text-main)' }}>Loading 3D Custom Cake Studio...</h3>
-        <p style={{ color: 'var(--text-muted)' }}>Preparing 3D geometry engine and artisan bakery catalog.</p>
-      </div>
-    );
-  }
 
   return (
     <div style={{ padding: '2rem 0 5rem 0', backgroundColor: '#FDFBF7' }}>
@@ -811,7 +810,7 @@ export const CustomCakeBuilderPage: React.FC = () => {
                   Cake Sponge Crumb
                 </label>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '0.75rem' }}>
-                  {groupedOptions.BASE.map((opt) => {
+                  {(groupedOptions?.BASE || FALLBACK_OPTIONS.BASE).map((opt) => {
                     const isSelected = selectedBase?.id === opt.id;
                     return (
                       <div
@@ -845,7 +844,7 @@ export const CustomCakeBuilderPage: React.FC = () => {
                   Gourmet Filling & Fruit Compote
                 </label>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '0.75rem' }}>
-                  {groupedOptions.FLAVOR.map((opt) => {
+                  {(groupedOptions?.FLAVOR || FALLBACK_OPTIONS.FLAVOR).map((opt) => {
                     const isSelected = selectedFlavor?.id === opt.id;
                     return (
                       <div

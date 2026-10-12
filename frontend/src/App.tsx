@@ -78,6 +78,10 @@ export const App: React.FC = () => {
           <Route path="/cakes" element={<CakesPage />} />
           <Route path="/cakes/:idOrSlug" element={<CakeDetailPage />} />
           <Route path="/custom-builder" element={<CustomCakeBuilderPage />} />
+          <Route path="/studio" element={<CustomCakeBuilderPage />} />
+          <Route path="/custom-studio" element={<CustomCakeBuilderPage />} />
+          <Route path="/custom-cake-studio" element={<CustomCakeBuilderPage />} />
+          <Route path="/cake-studio" element={<CustomCakeBuilderPage />} />
           <Route path="/how-it-works" element={<HowItWorksPage />} />
           <Route path="/cart" element={<CartPage />} />
           <Route path="/login" element={<LoginPage />} />
