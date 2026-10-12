@@ -11,6 +11,13 @@ export const authApi = {
   getMe: () =>
     ApiClient.get<{ user: User; bakery?: Bakery | null }>('/auth/me'),
 
-  updateProfile: (data: { fullName?: string; phone?: string | null; avatarUrl?: string | null }) =>
-    ApiClient.put<User>('/auth/profile', data),
+  updateProfile: (data: {
+    fullName?: string;
+    phone?: string | null;
+    avatarUrl?: string | null;
+    bio?: string | null;
+    dietaryPreferences?: string[];
+    savedAddresses?: any[];
+    celebrationDates?: any[];
+  }) => ApiClient.put<User>('/auth/profile', data),
 };

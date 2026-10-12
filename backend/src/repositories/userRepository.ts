@@ -47,6 +47,10 @@ export class UserRepository {
       fullName?: string;
       phone?: string | null;
       avatarUrl?: string | null;
+      bio?: string | null;
+      dietaryPreferences?: any;
+      savedAddresses?: any;
+      celebrationDates?: any;
       isActive?: boolean;
     }
   ): UserSafe | null {
@@ -64,6 +68,22 @@ export class UserRepository {
     if (data.avatarUrl !== undefined) {
       updates.push('avatar_url = ?');
       params.push(data.avatarUrl);
+    }
+    if (data.bio !== undefined) {
+      updates.push('bio = ?');
+      params.push(data.bio);
+    }
+    if (data.dietaryPreferences !== undefined) {
+      updates.push('dietary_preferences = ?');
+      params.push(typeof data.dietaryPreferences === 'string' ? data.dietaryPreferences : JSON.stringify(data.dietaryPreferences));
+    }
+    if (data.savedAddresses !== undefined) {
+      updates.push('saved_addresses = ?');
+      params.push(typeof data.savedAddresses === 'string' ? data.savedAddresses : JSON.stringify(data.savedAddresses));
+    }
+    if (data.celebrationDates !== undefined) {
+      updates.push('celebration_dates = ?');
+      params.push(typeof data.celebrationDates === 'string' ? data.celebrationDates : JSON.stringify(data.celebrationDates));
     }
     if (data.isActive !== undefined) {
       updates.push('is_active = ?');
@@ -127,6 +147,10 @@ export class UserRepository {
       phone: user.phone,
       role: user.role,
       avatar_url: user.avatar_url,
+      bio: user.bio,
+      dietary_preferences: user.dietary_preferences,
+      saved_addresses: user.saved_addresses,
+      celebration_dates: user.celebration_dates,
       is_active: user.is_active === 1,
       created_at: user.created_at,
     };

@@ -29,6 +29,10 @@ export interface User {
   phone: string | null;
   role: UserRole;
   avatar_url: string | null;
+  bio?: string | null;
+  dietary_preferences?: string | null;
+  saved_addresses?: string | null;
+  celebration_dates?: string | null;
   is_active: number;
   created_at: string;
   updated_at: string;
@@ -41,6 +45,10 @@ export interface UserSafe {
   phone: string | null;
   role: UserRole;
   avatar_url: string | null;
+  bio?: string | null;
+  dietary_preferences?: string | null;
+  saved_addresses?: string | null;
+  celebration_dates?: string | null;
   is_active: boolean;
   created_at: string;
 }

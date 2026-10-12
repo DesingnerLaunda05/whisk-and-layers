@@ -21,6 +21,25 @@ export type CustomOptionType =
   | 'TOPPING'
   | 'DECORATION';
 
+export interface SavedAddress {
+  id: string;
+  label: 'Home' | 'Work' | 'Other';
+  flatNo: string;
+  streetArea: string;
+  landmark?: string;
+  city: string;
+  state: string;
+  pinCode: string;
+  isDefault?: boolean;
+}
+
+export interface CelebrationDate {
+  id: string;
+  title: string;
+  date: string;
+  reminderDays?: number;
+}
+
 export interface User {
   id: number;
   email: string;
@@ -28,6 +47,10 @@ export interface User {
   phone: string | null;
   role: UserRole;
   avatar_url: string | null;
+  bio?: string | null;
+  dietary_preferences?: string[] | string | null;
+  saved_addresses?: SavedAddress[] | string | null;
+  celebration_dates?: CelebrationDate[] | string | null;
   is_active: boolean;
   created_at: string;
 }
@@ -127,6 +150,8 @@ export interface CartItem {
   customMessage?: string;
   selectedOptions?: Record<string, string>;
   leadDays: number;
+  referenceImage?: string;
+  referenceNotes?: string;
 }
 
 export interface OrderItem {
@@ -162,6 +187,8 @@ export interface Order {
   special_instructions: string | null;
   payment_method: string;
   payment_status: PaymentStatus;
+  transaction_id?: string | null;
+  payment_details?: string | null;
   created_at: string;
   customer_email?: string;
   bakery_name?: string;

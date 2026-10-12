@@ -63,3 +63,5 @@ coverage/
 .vite/
 frontend/node_modules/.vite/
 .cache/
+__pycache__/
+*.pyc

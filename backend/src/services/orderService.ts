@@ -88,6 +88,9 @@ export class OrderService {
       deliveryTimeSlot: data.deliveryTimeSlot,
       specialInstructions: data.specialInstructions,
       paymentMethod: data.paymentMethod || 'PAY_ON_DELIVERY',
+      paymentStatus: data.paymentStatus,
+      transactionId: data.transactionId,
+      paymentDetails: data.paymentDetails,
       items: validatedItems,
     });
 

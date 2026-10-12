@@ -55,6 +55,9 @@ export class OrderRepository {
     deliveryTimeSlot?: string | null;
     specialInstructions?: string | null;
     paymentMethod: string;
+    paymentStatus?: string;
+    transactionId?: string | null;
+    paymentDetails?: string | null;
     items: Array<{
       cakeId?: number | null;
       cakeName: string;
@@ -73,12 +76,14 @@ export class OrderRepository {
       const currentYear = new Date().getFullYear();
       const orderNumber = `WL-${currentYear}-${randomSuffix}`;
 
+      const paymentStatus = data.paymentStatus || (data.paymentMethod === 'PAY_ON_DELIVERY' ? 'PENDING' : 'PAID');
+
       const res = db.execute(
         `INSERT INTO orders (
           order_number, customer_id, bakery_id, total_amount, subtotal, delivery_fee, tax_amount,
           status, customer_name, customer_phone, delivery_address, delivery_date, delivery_time_slot,
-          special_instructions, payment_method, payment_status
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, 'PENDING', ?, ?, ?, ?, ?, ?, ?, 'PENDING')`,
+          special_instructions, payment_method, payment_status, transaction_id, payment_details
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, 'PENDING', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
         [
           orderNumber,
           data.customerId,
@@ -94,6 +99,9 @@ export class OrderRepository {
           data.deliveryTimeSlot || null,
           data.specialInstructions || null,
           data.paymentMethod,
+          paymentStatus,
+          data.transactionId || null,
+          data.paymentDetails || null,
         ]
       );
 

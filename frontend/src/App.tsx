@@ -3,6 +3,7 @@ import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from './context/AuthContext';
 import { Navbar } from './components/layout/Navbar';
 import { Footer } from './components/layout/Footer';
+import { ScrollToTop } from './components/layout/ScrollToTop';
 import { BakeryLayout } from './components/layout/BakeryLayout';
 import { AdminLayout } from './components/layout/AdminLayout';
 
@@ -65,6 +66,7 @@ const RequireAuth: React.FC<{ children: JSX.Element; allowedRoles?: string[] }> 
 export const App: React.FC = () => {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+      <ScrollToTop />
       <Navbar />
 
       <main style={{ flex: 1 }}>

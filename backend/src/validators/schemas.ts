@@ -46,7 +46,11 @@ export const updateProfileSchema = z.object({
     })
     .optional()
     .nullable(),
-  avatarUrl: z.string().url().optional().nullable(),
+  avatarUrl: z.string().optional().nullable(),
+  bio: z.string().max(500).optional().nullable(),
+  dietaryPreferences: z.union([z.string(), z.array(z.string())]).optional().nullable(),
+  savedAddresses: z.union([z.string(), z.array(z.any())]).optional().nullable(),
+  celebrationDates: z.union([z.string(), z.array(z.any())]).optional().nullable(),
 });
 
 // Bakery Schemas
@@ -114,8 +118,11 @@ export const createOrderSchema = z.object({
   deliveryTimeSlot: z.string().optional().nullable(),
   specialInstructions: z.string().max(500).optional().nullable(),
   paymentMethod: z
-    .enum(['PAY_ON_DELIVERY', 'UPI_PAYMENT', 'CARD_PAYMENT', 'NET_BANKING', 'WALLET'])
+    .enum(['PAY_ON_DELIVERY', 'UPI', 'UPI_PAYMENT', 'CARD_PAYMENT', 'NET_BANKING', 'WALLET'])
     .default('PAY_ON_DELIVERY'),
+  paymentStatus: z.enum(['UNPAID', 'PENDING', 'PAID', 'REFUNDED']).optional(),
+  transactionId: z.string().optional().nullable(),
+  paymentDetails: z.string().optional().nullable(),
   items: z.array(orderItemSchema).min(1, 'Order must contain at least one item'),
 });
 

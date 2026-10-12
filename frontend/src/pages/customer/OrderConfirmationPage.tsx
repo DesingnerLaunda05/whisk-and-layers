@@ -127,6 +127,38 @@ export const OrderConfirmationPage: React.FC = () => {
                 <span>{order.delivery_address}</span>
               </div>
             </div>
+
+            <div>
+              <div style={{ fontSize: '0.8rem', color: 'var(--text-light)', marginBottom: '0.2rem' }}>Payment Status</div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
+                <span
+                  className="badge"
+                  style={{
+                    backgroundColor: order.payment_status === 'PAID' ? '#DEF7EC' : '#FEF3C7',
+                    color: order.payment_status === 'PAID' ? '#03543F' : '#92400E',
+                    fontWeight: 700,
+                  }}
+                >
+                  {order.payment_status === 'PAID' ? '✓ PAYMENT PAID & VERIFIED' : '⏳ PAYMENT DUE ON DELIVERY'}
+                </span>
+                <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
+                  ({order.payment_method?.replace(/_/g, ' ') || 'Pay on Delivery'})
+                </span>
+              </div>
+              {order.transaction_id && (
+                <div style={{ fontSize: '0.78rem', color: 'var(--text-light)', marginTop: '0.25rem' }}>
+                  Ref / Txn ID: <code style={{ backgroundColor: 'var(--bg-muted)', padding: '2px 5px', borderRadius: '4px' }}>{order.transaction_id}</code>
+                </div>
+              )}
+            </div>
+
+            <div>
+              <div style={{ fontSize: '0.8rem', color: 'var(--text-light)', marginBottom: '0.2rem' }}>Artisan Bakery Contact</div>
+              <div style={{ fontWeight: 600, fontSize: '0.9rem', color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                <Store size={16} color="var(--primary)" />
+                <span>{order.bakery_name} ({order.bakery_phone || '+91 9876543210'})</span>
+              </div>
+            </div>
           </div>
 
           {/* Items List */}

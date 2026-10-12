@@ -122,7 +122,15 @@ export class AuthService {
 
   public updateProfile(
     userId: number,
-    data: { fullName?: string; phone?: string | null; avatarUrl?: string | null }
+    data: {
+      fullName?: string;
+      phone?: string | null;
+      avatarUrl?: string | null;
+      bio?: string | null;
+      dietaryPreferences?: any;
+      savedAddresses?: any;
+      celebrationDates?: any;
+    }
   ) {
     const updated = userRepository.update(userId, data);
     if (!updated) {

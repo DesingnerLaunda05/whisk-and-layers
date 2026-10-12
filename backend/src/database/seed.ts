@@ -73,45 +73,53 @@ export async function seedDatabase(force = false) {
       'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80'
     ]);
 
-    // Bakery Owners (Fictional Indian Bakery Entrepreneurs)
-    const bakeryOwner1 = db.execute(`
-      INSERT INTO users (email, password_hash, full_name, phone, role, avatar_url, is_active)
-      VALUES (?, ?, ?, ?, ?, ?, 1)
-    `, [
-      'sweetcrust@whiskandlayers.com',
-      bakeryPassword,
-      'Priya & Rohan Joshi',
-      '+91 9825123456',
-      'BAKERY',
-      'https://images.unsplash.com/photo-1577219491135-ce391730fb2c?w=150&auto=format&fit=crop&q=80'
-    ]);
+    // Bakery Owners (18 Indian Artisan Bakery Entrepreneurs)
+    const bakeryOwner1 = db.execute(`INSERT INTO users (email, password_hash, full_name, phone, role, avatar_url, is_active) VALUES (?, ?, ?, ?, ?, ?, 1)`,
+      ['sweetcrust@whiskandlayers.com', bakeryPassword, 'Priya & Rohan Joshi', '+91 9825123456', 'BAKERY', 'https://images.unsplash.com/photo-1577219491135-ce391730fb2c?w=150&auto=format&fit=crop&q=80']);
     const bakeryOwner1Id = bakeryOwner1.lastInsertRowid;
 
-    const bakeryOwner2 = db.execute(`
-      INSERT INTO users (email, password_hash, full_name, phone, role, avatar_url, is_active)
-      VALUES (?, ?, ?, ?, ?, ?, 1)
-    `, [
-      'velvetlayer@whiskandlayers.com',
-      bakeryPassword,
-      'Ananya Desai',
-      '+91 9909988776',
-      'BAKERY',
-      'https://images.unsplash.com/photo-1583394293214-28ded15ee548?w=150&auto=format&fit=crop&q=80'
-    ]);
+    const bakeryOwner2 = db.execute(`INSERT INTO users (email, password_hash, full_name, phone, role, avatar_url, is_active) VALUES (?, ?, ?, ?, ?, ?, 1)`,
+      ['velvetlayer@whiskandlayers.com', bakeryPassword, 'Ananya Desai', '+91 9909988776', 'BAKERY', 'https://images.unsplash.com/photo-1583394293214-28ded15ee548?w=150&auto=format&fit=crop&q=80']);
     const bakeryOwner2Id = bakeryOwner2.lastInsertRowid;
 
-    const bakeryOwner3 = db.execute(`
-      INSERT INTO users (email, password_hash, full_name, phone, role, avatar_url, is_active)
-      VALUES (?, ?, ?, ?, ?, ?, 1)
-    `, [
-      'goldenwhisk@whiskandlayers.com',
-      bakeryPassword,
-      'Rahul Shah',
-      '+91 9898123456',
-      'BAKERY',
-      'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80'
-    ]);
+    const bakeryOwner3 = db.execute(`INSERT INTO users (email, password_hash, full_name, phone, role, avatar_url, is_active) VALUES (?, ?, ?, ?, ?, ?, 1)`,
+      ['goldenwhisk@whiskandlayers.com', bakeryPassword, 'Rahul Shah', '+91 9898123456', 'BAKERY', 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80']);
     const bakeryOwner3Id = bakeryOwner3.lastInsertRowid;
+
+    const additionalBakers = [
+      ['sugarandcrumbs@whiskandlayers.com', 'Tanya Mehra', '+91 9825456789', 'https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?w=150&auto=format&fit=crop&q=80'],
+      ['cocoalane@whiskandlayers.com', 'Jayesh Vora', '+91 9879123456', 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150&auto=format&fit=crop&q=80'],
+      ['bakeandbloom@whiskandlayers.com', 'Sneha Merchant', '+91 9824987654', 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&auto=format&fit=crop&q=80'],
+      ['velvetganache@whiskandlayers.com', 'Chef Arvind Hegde', '+91 9845112233', 'https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=150&auto=format&fit=crop&q=80'],
+      ['artisanfrost@whiskandlayers.com', 'Maya Kulkarni', '+91 9845223344', 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&auto=format&fit=crop&q=80'],
+      ['crumbandco@whiskandlayers.com', 'Vikram Singh Rathore', '+91 9810112233', 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80'],
+      ['vanillabean@whiskandlayers.com', 'Natasha Kapoor', '+91 9818223344', 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150&auto=format&fit=crop&q=80'],
+      ['flourandpetals@whiskandlayers.com', 'Rohit Deshmukh', '+91 9822334455', 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80'],
+      ['cocoaatelier@whiskandlayers.com', 'Farhan & Zara Qureshi', '+91 9849012345', 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80'],
+      ['sweetsymphony@whiskandlayers.com', 'Lakshmi Ramanathan', '+91 9840123456', 'https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?w=150&auto=format&fit=crop&q=80'],
+      ['frenchwhisk@whiskandlayers.com', 'Debolina Mukherjee', '+91 9830123456', 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&auto=format&fit=crop&q=80'],
+      ['amberandhoney@whiskandlayers.com', 'Gayatri Shekhawat', '+91 9829012345', 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150&auto=format&fit=crop&q=80'],
+      ['coastalcrumb@whiskandlayers.com', 'Carlos & Maria Fernandes', '+91 9823012345', 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150&auto=format&fit=crop&q=80'],
+      ['pastryguild@whiskandlayers.com', 'Harpreet Dhillon', '+91 9815012345', 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80'],
+      ['cinnamonclove@whiskandlayers.com', 'Thomas & Ann Varghese', '+91 9847012345', 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80'],
+    ];
+
+    const bakerOwnerIds: number[] = [bakeryOwner1Id, bakeryOwner2Id, bakeryOwner3Id];
+    for (const b of additionalBakers) {
+      const res = db.execute(`INSERT INTO users (email, password_hash, full_name, phone, role, avatar_url, is_active) VALUES (?, ?, ?, ?, 'BAKERY', ?, 1)`,
+        [b[0], bakeryPassword, b[1], b[2], b[3]]);
+      bakerOwnerIds.push(res.lastInsertRowid);
+    }
+
+    // Additional Customer Users
+    const extraCustomers = [
+      ['meera.sundaram@example.com', 'Meera Sundaram', '+91 9845012345', 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80'],
+      ['kabir.malhotra@example.com', 'Kabir Malhotra', '+91 9811122334', 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150&auto=format&fit=crop&q=80'],
+    ];
+    for (const c of extraCustomers) {
+      db.execute(`INSERT INTO users (email, password_hash, full_name, phone, role, avatar_url, is_active) VALUES (?, ?, ?, ?, 'CUSTOMER', ?, 1)`,
+        [c[0], customerPassword, c[1], c[2], c[3]]);
+    }
 
     // Admin
     db.execute(`
@@ -126,78 +134,39 @@ export async function seedDatabase(force = false) {
       'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&auto=format&fit=crop&q=80'
     ]);
 
-    // 2. Insert Bakeries (Fictional Indian Artisan Bakeries)
-    const bakery1 = db.execute(`
-      INSERT INTO bakeries (user_id, name, slug, tagline, description, address, city, state, postal_code, phone, email, logo_url, banner_url, specialties, rating_avg, review_count, is_approved, is_active, minimum_lead_days)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, 1, ?)
-    `, [
-      bakeryOwner1Id,
-      'Whisk House',
-      'whisk-house',
-      'French-inspired layered confectionery & bespoke celebration cakes',
-      'Founded in Bodakdev, Ahmedabad, Whisk House specializes in pure Belgian chocolate truffle creations, royal rasmalai celebration tiers, and 100% eggless gourmet patisserie made fresh daily.',
-      '402 Bodakdev Galleria, Sindhu Bhavan Road',
-      'Ahmedabad',
-      'Gujarat',
-      '380054',
-      '+91 9825123456',
-      'whiskhouse@whiskandlayers.com',
-      'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=300&auto=format&fit=crop&q=80',
-      'https://images.unsplash.com/photo-1517433670267-08bbd4be890f?w=1200&auto=format&fit=crop&q=80',
-      '100% Eggless Specials, Belgian Truffle, Rasmalai Tiers, Botanical Buttercream',
-      4.9,
-      58,
-      2
-    ]);
-    const bakery1Id = bakery1.lastInsertRowid;
+    // 2. Insert Bakeries (18 Indian Artisan Bakeries)
+    const bakeryList = [
+      [bakerOwnerIds[0], 'Whisk House', 'whisk-house', 'French-inspired layered confectionery & bespoke celebration cakes', 'Founded in Bodakdev, Ahmedabad, Whisk House specializes in pure Belgian chocolate truffle creations, royal rasmalai celebration tiers, and 100% eggless gourmet patisserie made fresh daily.', '402 Bodakdev Galleria, Sindhu Bhavan Road', 'Ahmedabad', 'Gujarat', '380054', '+91 9825123456', 'whiskhouse@whiskandlayers.com', 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=300&auto=format&fit=crop&q=80', 'https://images.unsplash.com/photo-1517433670267-08bbd4be890f?w=1200&auto=format&fit=crop&q=80', '100% Eggless Specials, Belgian Truffle, Rasmalai Tiers, Botanical Buttercream', 4.9, 58, 2],
+      [bakerOwnerIds[1], 'The Cake Story', 'the-cake-story', 'Sculpted celebration cakes, decadent cheesecakes & fusion delights', 'Located near Vastrapur Lake in Ahmedabad, The Cake Story creates bespoke celebration centerpieces blending international confectionery trends with rich Indian tastes like Lotus Biscoff, Alphonso Mango, and Gulab Jamun.', 'Shop 14, Vastrapur Lake Arcade, Vastrapur', 'Ahmedabad', 'Gujarat', '380015', '+91 9909988776', 'thecakestory@whiskandlayers.com', 'https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=300&auto=format&fit=crop&q=80', 'https://images.unsplash.com/photo-1586985289688-ca3cf47d3e6e?w=1200&auto=format&fit=crop&q=80', 'Biscoff Cheesecakes, Indian Fusion, Birthday Showstoppers, Custom Sugar Art', 4.8, 42, 2],
+      [bakerOwnerIds[2], 'Sweet Oven', 'sweet-oven', 'Farm-fresh organic dairy bakes, vintage lambeth piping & fresh fruit cakes', 'Situated in Pali Hill, Bandra West, Mumbai, Sweet Oven crafts heirloom celebration cakes using rich A2 dairy, fresh seasonal Indian orchard fruits, and delicate Victorian Lambeth piping techniques.', '104 Pali Hill Promenade, Bandra West', 'Mumbai', 'Maharashtra', '400050', '+91 9898123456', 'sweetoven@whiskandlayers.com', 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=300&auto=format&fit=crop&q=80', 'https://images.unsplash.com/photo-1516738901171-8eb4fc13bd20?w=1200&auto=format&fit=crop&q=80', 'Vintage Lambeth Piping, Fresh Mango Gateaux, Organic Dairy, Floral Styling', 5.0, 34, 2],
+      [bakerOwnerIds[3], 'Sugar & Crumbs', 'sugar-and-crumbs', 'Contemporary dessert studio & artisanal celebration tortes', 'Based in Vesu, Surat, Sugar & Crumbs crafts modern tiered masterpieces, delicate French macarons, and decadent chocolate ganache gateaux.', '21 Silver Stone Hub, VIP Road, Vesu', 'Surat', 'Gujarat', '395007', '+91 9825456789', 'sugarcrumbs@whiskandlayers.com', 'https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=300&auto=format&fit=crop&q=80', 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=1200&auto=format&fit=crop&q=80', 'Macaron Cakes, Contemporary Tortes, Eggless Delights', 4.9, 27, 2],
+      [bakerOwnerIds[4], 'Cocoa Lane', 'cocoa-lane', 'Gourmet handcrafted chocolate creations & custom tiers', 'Rajkot’s beloved destination for premium custom celebration cakes, Belgian chocolate delicacies, and fusion dessert cups.', '150 Feet Ring Road, Near Nana Mava Circle', 'Rajkot', 'Gujarat', '360005', '+91 9879123456', 'cocoalane@whiskandlayers.com', 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=300&auto=format&fit=crop&q=80', 'https://images.unsplash.com/photo-1517433670267-08bbd4be890f?w=1200&auto=format&fit=crop&q=80', 'Belgian Chocolate Truffle, Rasmalai Cakes, Custom Birthday Cakes', 4.8, 31, 1],
+      [bakerOwnerIds[5], 'Bake & Bloom', 'bake-and-bloom', 'Botanical florals, hand-piped bakes & luxury tiered cakes', 'Alkapuri, Vadodara’s boutique studio for pressed edible flower cakes, vintage European piping, and organic fruit fillings.', '8 Alkapuri Heights, RC Dutt Road, Alkapuri', 'Vadodara', 'Gujarat', '390007', '+91 9824987654', 'bakebloom@whiskandlayers.com', 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=300&auto=format&fit=crop&q=80', 'https://images.unsplash.com/photo-1516738901171-8eb4fc13bd20?w=1200&auto=format&fit=crop&q=80', 'Pressed Flowers, Vintage Lambeth, Tea Cakes, Eggless Gateaux', 5.0, 22, 2],
+      [bakerOwnerIds[6], 'The Velvet Ganache', 'the-velvet-ganache', 'Bean-to-bar dark chocolate tiers & artisanal sourdough cakes', 'Located in Koramangala, Bengaluru, The Velvet Ganache pairs single-origin cocoa from Idukki with French pastry technique.', '77 4th Block, 80 Feet Road, Koramangala', 'Bengaluru', 'Karnataka', '560034', '+91 9845112233', 'velvetganache@whiskandlayers.com', 'https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=300&auto=format&fit=crop&q=80', 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=1200&auto=format&fit=crop&q=80', 'Bean-to-Bar Cocoa, Salted Caramel Truffle, Vegan Chocolate Tiers', 4.9, 48, 2],
+      [bakerOwnerIds[7], 'Artisan Frost', 'artisan-frost', 'Nordic minimalist aesthetics, berry compotes & celebration tortes', 'Nestled in 12th Main, Indiranagar, Artisan Frost creates sleek Scandinavian styled celebration centerpieces.', '1088 12th Main Road, Indiranagar', 'Bengaluru', 'Karnataka', '560038', '+91 9845223344', 'artisanfrost@whiskandlayers.com', 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=300&auto=format&fit=crop&q=80', 'https://images.unsplash.com/photo-1517433670267-08bbd4be890f?w=1200&auto=format&fit=crop&q=80', 'Wild Berry Gateaux, Minimalist Buttercream, Wedding Towers', 4.8, 36, 2],
+      [bakerOwnerIds[8], 'Crumb & Co.', 'crumb-and-co', 'Royal multi-tiered showstoppers & 24K edible gold bakes', 'South Extension II, New Delhi studio famous for extravagant bespoke multi-tiered wedding cakes.', 'M-14 South Extension Part II', 'New Delhi', 'Delhi', '110049', '+91 9810112233', 'crumbandco@whiskandlayers.com', 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=300&auto=format&fit=crop&q=80', 'https://images.unsplash.com/photo-1516738901171-8eb4fc13bd20?w=1200&auto=format&fit=crop&q=80', 'Royal Wedding Tiers, 24K Gold Leaf, Fondant Sculptures, Red Velvet', 4.9, 64, 3],
+      [bakerOwnerIds[9], 'Vanilla Bean Studio', 'vanilla-bean-studio', 'Madagascar vanilla bean chiffon & mirror glaze French tortes', 'DLF Phase 4, Gurugram boutique patisserie blending French culinary heritage with authentic vanilla beans.', 'Galleria Market, DLF Phase 4', 'Gurugram', 'Haryana', '122009', '+91 9818223344', 'vanillabean@whiskandlayers.com', 'https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=300&auto=format&fit=crop&q=80', 'https://images.unsplash.com/photo-1586985289688-ca3cf47d3e6e?w=1200&auto=format&fit=crop&q=80', 'Vanilla Bean Chiffon, Mirror Glaze, Eggless Patisserie, Fruit Tarts', 4.9, 41, 2],
+      [bakerOwnerIds[10], 'Flour & Petals', 'flour-and-petals', 'Artisanal organic floristry, botanical bakes & choux towers', 'Koregaon Park, Pune atelier celebrating seasonal Maharashtra produce, delicate garden florals, and heirloom fruit reduction gateaux.', 'Lane 7, Koregaon Park', 'Pune', 'Maharashtra', '411001', '+91 9822334455', 'flourandpetals@whiskandlayers.com', 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=300&auto=format&fit=crop&q=80', 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=1200&auto=format&fit=crop&q=80', 'Botanical Cake Art, Mahabaleshwar Berry Compotes, Choux Croquembouche', 4.8, 38, 2],
+      [bakerOwnerIds[11], 'The Cocoa Atelier', 'the-cocoa-atelier', 'Single-origin cocoa & royal saffron pistachio fusion bakes', 'Situated in Road No. 12, Banjara Hills, Hyderabad, The Cocoa Atelier weaves royal Nizami aromatics like saffron, rosewater, and roasted pistachios with dark Belgian chocolate.', 'Road No. 12, Banjara Hills', 'Hyderabad', 'Telangana', '500034', '+91 9849012345', 'cocoaatelier@whiskandlayers.com', 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=300&auto=format&fit=crop&q=80', 'https://images.unsplash.com/photo-1516738901171-8eb4fc13bd20?w=1200&auto=format&fit=crop&q=80', 'Saffron Pistachio Tiers, Belgian Ganache, Royal Celebration Cakes', 5.0, 53, 2],
+      [bakerOwnerIds[12], 'Sweet Symphony', 'sweet-symphony', 'South Indian spiced caramel & botanical celebration tiers', 'Located in TTK Road, Alwarpet, Chennai, Sweet Symphony combines Kumbakonam degree coffee reductions, salted jaggery caramel, and velvety buttercream finishes.', '142 TTK Road, Alwarpet', 'Chennai', 'Tamil Nadu', '600018', '+91 9840123456', 'sweetsymphony@whiskandlayers.com', 'https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=300&auto=format&fit=crop&q=80', 'https://images.unsplash.com/photo-1586985289688-ca3cf47d3e6e?w=1200&auto=format&fit=crop&q=80', 'Filter Coffee Praline, Salted Jaggery Caramel, Eggless Specials', 4.8, 29, 2],
+      [bakerOwnerIds[13], 'The French Whisk', 'the-french-whisk', 'Classical French entremets, opera cakes & hazelnut praline', 'Heritage bakery off Park Street, Kolkata, renowned for classic French layer cakes, dark chocolate truffle gateaux, and festive celebration centerpieces.', '24B Park Street, Near Camac Street Crossing', 'Kolkata', 'West Bengal', '700016', '+91 9830123456', 'frenchwhisk@whiskandlayers.com', 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=300&auto=format&fit=crop&q=80', 'https://images.unsplash.com/photo-1517433670267-08bbd4be890f?w=1200&auto=format&fit=crop&q=80', 'French Opera Cake, Praline Gateaux, Nolen Gur Fusion, Belgian Dark Ganache', 4.9, 45, 2],
+      [bakerOwnerIds[14], 'Amber & Honey', 'amber-and-honey', 'Royal Rajasthani saffron cardamom & organic wild honey cakes', 'Located in C-Scheme, Jaipur, Amber & Honey brings majestic royal flavors to life with Kashmiri saffron, raw Aravali forest honey, and hand-rolled marzipan.', 'Jacob Road, Civil Lines / C-Scheme', 'Jaipur', 'Rajasthan', '302006', '+91 9829012345', 'amberandhoney@whiskandlayers.com', 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=300&auto=format&fit=crop&q=80', 'https://images.unsplash.com/photo-1516738901171-8eb4fc13bd20?w=1200&auto=format&fit=crop&q=80', 'Kesar Badam Tiers, Honey Cinnamon Gateaux, Traditional Royal Bakes', 4.9, 33, 2],
+      [bakerOwnerIds[15], 'Coastal Crumb', 'coastal-crumb', 'Goan tropical passionfruit, coconut milk sponge & fusion tiers', 'Based in Fontainhas, Panaji, Coastal Crumb creates joyful island celebration cakes using pure coconut cream, mango coulis, and layered Goan bebinca inspirations.', '31 Rua 31 de Janeiro, Fontainhas, Panaji', 'Goa', 'Goa', '403001', '+91 9823012345', 'coastalcrumb@whiskandlayers.com', 'https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=300&auto=format&fit=crop&q=80', 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=1200&auto=format&fit=crop&q=80', 'Tropical Passionfruit, Coconut Chiffon, Bebinca Layer Cake, Beach Wedding Tiers', 5.0, 39, 1],
+      [bakerOwnerIds[16], 'The Pastry Guild', 'the-pastry-guild', 'Architectural celebration tiers & rich hazelnut praline tortes', 'Sector 35, Chandigarh studio recognized for razor-sharp ganache edges, architectural cantilever tiers, and toasted hazelnut rocher cakes.', 'SCO 214, Sector 35-D', 'Chandigarh', 'Punjab', '160035', '+91 9815012345', 'pastryguild@whiskandlayers.com', 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=300&auto=format&fit=crop&q=80', 'https://images.unsplash.com/photo-1517433670267-08bbd4be890f?w=1200&auto=format&fit=crop&q=80', 'Architectural Tiers, Hazelnut Praline, Biscoff Crunch, Birthday Towers', 4.8, 28, 2],
+      [bakerOwnerIds[17], 'Cinnamon & Clove', 'cinnamon-and-clove', 'Kerala vanilla bean, roasted pineapple & dark cocoa gateaux', 'Boutique studio in Fort Kochi blending spice-route spices like Tellicherry peppered strawberries, organic nutmeg caramel, and Malabar cocoa sponge.', '11/45 River Road, Fort Kochi', 'Kochi', 'Kerala', '682001', '+91 9847012345', 'cinnamonclove@whiskandlayers.com', 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=300&auto=format&fit=crop&q=80', 'https://images.unsplash.com/photo-1516738901171-8eb4fc13bd20?w=1200&auto=format&fit=crop&q=80', 'Malabar Cocoa Gateaux, Roasted Pineapple Compote, Spiced Caramel Tiers', 4.9, 35, 2],
+    ];
 
-    const bakery2 = db.execute(`
-      INSERT INTO bakeries (user_id, name, slug, tagline, description, address, city, state, postal_code, phone, email, logo_url, banner_url, specialties, rating_avg, review_count, is_approved, is_active, minimum_lead_days)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, 1, ?)
-    `, [
-      bakeryOwner2Id,
-      'The Cake Story',
-      'the-cake-story',
-      'Sculpted celebration cakes, decadent cheesecakes & fusion delights',
-      'Located near Vastrapur Lake in Ahmedabad, The Cake Story creates bespoke celebration centerpieces blending international confectionery trends with rich Indian tastes like Lotus Biscoff, Alphonso Mango, and Gulab Jamun.',
-      'Shop 14, Vastrapur Lake Arcade, Vastrapur',
-      'Ahmedabad',
-      'Gujarat',
-      '380015',
-      '+91 9909988776',
-      'thecakestory@whiskandlayers.com',
-      'https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=300&auto=format&fit=crop&q=80',
-      'https://images.unsplash.com/photo-1586985289688-ca3cf47d3e6e?w=1200&auto=format&fit=crop&q=80',
-      'Biscoff Cheesecakes, Indian Fusion, Birthday Showstoppers, Custom Sugar Art',
-      4.8,
-      42,
-      2
-    ]);
-    const bakery2Id = bakery2.lastInsertRowid;
-
-    const bakery3 = db.execute(`
-      INSERT INTO bakeries (user_id, name, slug, tagline, description, address, city, state, postal_code, phone, email, logo_url, banner_url, specialties, rating_avg, review_count, is_approved, is_active, minimum_lead_days)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, 1, ?)
-    `, [
-      bakeryOwner3Id,
-      'Sweet Oven',
-      'sweet-oven',
-      'Farm-fresh organic dairy bakes, vintage lambeth piping & fresh fruit cakes',
-      'Situated in Pali Hill, Bandra West, Mumbai, Sweet Oven crafts heirloom celebration cakes using rich A2 dairy, fresh seasonal Indian orchard fruits, and delicate Victorian Lambeth piping techniques.',
-      '104 Pali Hill Promenade, Bandra West',
-      'Mumbai',
-      'Maharashtra',
-      '400050',
-      '+91 9898123456',
-      'sweetoven@whiskandlayers.com',
-      'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=300&auto=format&fit=crop&q=80',
-      'https://images.unsplash.com/photo-1516738901171-8eb4fc13bd20?w=1200&auto=format&fit=crop&q=80',
-      'Vintage Lambeth Piping, Fresh Mango Gateaux, Organic Dairy, Floral Styling',
-      5.0,
-      34,
-      2
-    ]);
-    const bakery3Id = bakery3.lastInsertRowid;
+    const bakeryIds: number[] = [];
+    for (const b of bakeryList) {
+      const bRes = db.execute(`
+        INSERT INTO bakeries (user_id, name, slug, tagline, description, address, city, state, postal_code, phone, email, logo_url, banner_url, specialties, rating_avg, review_count, is_approved, is_active, minimum_lead_days)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, 1, ?)
+      `, b);
+      bakeryIds.push(bRes.lastInsertRowid);
+    }
+    const bakery1Id = bakeryIds[0];
+    const bakery2Id = bakeryIds[1];
+    const bakery3Id = bakeryIds[2];
 
     // 3. Cake Categories
     const cat1 = db.execute(`
@@ -464,6 +433,32 @@ export async function seedDatabase(force = false) {
       null,
       1
     ]);
+
+    // Additional Cakes for Bakeries 4 to 18
+    const moreCakes = [
+      [bakeryIds[3], cat1Id, 'Raspberry French Macaron Torte', 'raspberry-french-macaron-torte', 'Delicate vanilla sponge filled with tart raspberry compote and crowned with pastel almond French macarons.', 850.0, 2, 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=800&auto=format&fit=crop&q=80'],
+      [bakeryIds[4], cat1Id, 'Belgian Dark Cocoa Signature Truffle', 'belgian-dark-cocoa-signature-truffle', 'Silky 70% dark Belgian cocoa ganache paired with moist eggless cocoa crumb and chocolate shards.', 700.0, 1, 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=800&auto=format&fit=crop&q=80'],
+      [bakeryIds[5], cat1Id, 'Pressed Edible Floral & Chamomile Gateau', 'pressed-floral-chamomile-gateau', 'Charming vintage European style cake decorated with organic pressed garden pansies and elderflower syrup.', 900.0, 2, 'https://images.unsplash.com/photo-1535254973040-607b474cb50d?w=800&auto=format&fit=crop&q=80'],
+      [bakeryIds[6], cat1Id, 'Idukki Bean-to-Bar Cocoa & Salted Caramel Tier', 'idukki-bean-to-bar-cocoa-salted-caramel', 'Crafted with artisanal Kerala cocoa beans, Fleur de Sel sea salt caramel, and chocolate velvet buttercream.', 1100.0, 2, 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=800&auto=format&fit=crop&q=80'],
+      [bakeryIds[7], cat1Id, 'Wild Ooty Berry Minimalist Cloud Cake', 'wild-ooty-berry-minimalist-cloud-cake', 'Scandinavian minimalist styling with fresh Nilsson-picked Ooty blackberries, strawberries, and airy chiffon sponge.', 950.0, 2, 'https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=800&auto=format&fit=crop&q=80'],
+      [bakeryIds[8], cat1Id, '24K Edible Gold Leaf Royal Wedding Showpiece', '24k-gold-leaf-royal-wedding-showpiece', 'Regal celebration centerpiece layered with Belgian truffle, red velvet, and pure 24k edible gold foil scrollwork.', 1500.0, 3, 'https://images.unsplash.com/photo-1535254973040-607b474cb50d?w=800&auto=format&fit=crop&q=80'],
+      [bakeryIds[9], cat1Id, 'Madagascar Bourbon Vanilla & Mirror Glaze Torte', 'madagascar-bourbon-vanilla-mirror-glaze', 'Pure Bourbon vanilla seed chiffon layered with passionfruit coulis and finished with high-gloss mirror glaze.', 850.0, 2, 'https://images.unsplash.com/photo-1542826438-bd32f43d626f?w=800&auto=format&fit=crop&q=80'],
+      [bakeryIds[10], cat1Id, 'Mahabaleshwar Strawberry & Botanical Rosette Cake', 'mahabaleshwar-strawberry-botanical-rosette', 'Farm-fresh organic Mahabaleshwar strawberries layered with delicate botanical buttercream rosettes.', 800.0, 2, 'https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=800&auto=format&fit=crop&q=80'],
+      [bakeryIds[11], cat3Id, 'Nizami Saffron & Pistachio Royal Ganache Cake', 'nizami-saffron-pistachio-royal-ganache', 'Aromatic Kashmiri saffron sponge layered with roasted Iranian pistachios and velvety white chocolate ganache.', 1050.0, 2, 'https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?w=800&auto=format&fit=crop&q=80'],
+      [bakeryIds[12], cat1Id, 'Kumbakonam Degree Coffee & Salted Caramel Cake', 'kumbakonam-degree-coffee-salted-caramel', 'Intense South Indian filter coffee reduction paired with organic jaggery caramel and rich chocolate sponge.', 750.0, 2, 'https://images.unsplash.com/photo-1558301211-0d8c8ddee6ec?w=800&auto=format&fit=crop&q=80'],
+      [bakeryIds[13], cat1Id, 'Classic French Opera & Nolen Gur Fusion Gateau', 'classic-french-opera-nolen-gur-gateau', 'Six distinct layers of almond jonde sponge, Bengal date palm jaggery ganache, and dark espresso buttercream.', 900.0, 2, 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=800&auto=format&fit=crop&q=80'],
+      [bakeryIds[14], cat3Id, 'Royal Kesar Elaichi & Wild Aravali Honey Torte', 'royal-kesar-elaichi-wild-honey-torte', 'Royal Rajasthani heritage flavors infused with wild honey, saffron milk, and delicate edible silver vark.', 950.0, 2, 'https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?w=800&auto=format&fit=crop&q=80'],
+      [bakeryIds[15], cat1Id, 'Tropical Passionfruit & Goan Coconut Milk Chiffon', 'tropical-passionfruit-coconut-milk-chiffon', 'Sun-ripened Goan passionfruit compote with airy fresh coconut milk chiffon and toasted coconut curls.', 850.0, 1, 'https://images.unsplash.com/photo-1535254973040-607b474cb50d?w=800&auto=format&fit=crop&q=80'],
+      [bakeryIds[16], cat1Id, 'Architectural Ferrero Rocher & Hazelnut Tower', 'architectural-ferrero-hazelnut-tower', 'Crisp chocolate hazelnut praline layers with chocolate fudge and gold-dusted whole Ferrero Rocher globes.', 1150.0, 2, 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=800&auto=format&fit=crop&q=80'],
+      [bakeryIds[17], cat1Id, 'Malabar Roasted Pineapple & Spiced Cocoa Cake', 'malabar-roasted-pineapple-spiced-cocoa', 'Caramelized Kerala pineapple compote infused with star anise and rich dark cocoa truffle crumb.', 800.0, 2, 'https://images.unsplash.com/photo-1519869325930-281384150729?w=800&auto=format&fit=crop&q=80'],
+    ];
+
+    for (const ck of moreCakes) {
+      db.execute(`
+        INSERT INTO cakes (bakery_id, category_id, name, slug, description, base_price, preparation_days, image_url, gallery_urls, is_customizable, is_available)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, null, 1, 1)
+      `, ck);
+    }
 
     // 6. Orders (with Indian delivery addresses and INR pricing)
     // Order 1: DELIVERED (Whisk House -> Aditya)

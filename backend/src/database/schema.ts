@@ -13,6 +13,10 @@ export async function initializeSchema(): Promise<void> {
       phone TEXT,
       role TEXT NOT NULL CHECK(role IN ('CUSTOMER', 'BAKERY', 'ADMIN')),
       avatar_url TEXT,
+      bio TEXT,
+      dietary_preferences TEXT,
+      saved_addresses TEXT,
+      celebration_dates TEXT,
       is_active INTEGER NOT NULL DEFAULT 1,
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
       updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
@@ -121,6 +125,8 @@ export async function initializeSchema(): Promise<void> {
       special_instructions TEXT,
       payment_method TEXT NOT NULL DEFAULT 'PAY_ON_DELIVERY',
       payment_status TEXT NOT NULL DEFAULT 'PENDING' CHECK(payment_status IN ('UNPAID', 'PENDING', 'PAID', 'REFUNDED')),
+      transaction_id TEXT,
+      payment_details TEXT,
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
       updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
       FOREIGN KEY (customer_id) REFERENCES users(id) ON DELETE RESTRICT,
@@ -189,5 +195,14 @@ export async function initializeSchema(): Promise<void> {
   `;
 
   db.exec(createTablesSql);
+
+  // Safe migrations for newly added columns if table already existed
+  try { db.exec('ALTER TABLE users ADD COLUMN bio TEXT;'); } catch (_) {}
+  try { db.exec('ALTER TABLE users ADD COLUMN dietary_preferences TEXT;'); } catch (_) {}
+  try { db.exec('ALTER TABLE users ADD COLUMN saved_addresses TEXT;'); } catch (_) {}
+  try { db.exec('ALTER TABLE users ADD COLUMN celebration_dates TEXT;'); } catch (_) {}
+  try { db.exec('ALTER TABLE orders ADD COLUMN transaction_id TEXT;'); } catch (_) {}
+  try { db.exec('ALTER TABLE orders ADD COLUMN payment_details TEXT;'); } catch (_) {}
+
   console.log('[Database] Schema initialized successfully.');
 }

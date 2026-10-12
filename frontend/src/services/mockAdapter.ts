@@ -63,14 +63,18 @@ export function handleMockFallback<T>(endpoint: string, options: { method?: stri
     } as unknown as T;
   }
 
-  if (pathname === '/auth/profile' && method === 'PUT') {
-    const users = MockDataStore.getUsers();
+  if (pathname === '/auth/profile' && (method === 'PUT' || method === 'PATCH')) {
     const activeId = parseInt(localStorage.getItem('wl_active_user_id') || '1', 10);
-    const user = users.find((u) => u.id === activeId) || users[0];
-    if (options.body.fullName) user.full_name = options.body.fullName;
-    if (options.body.phone !== undefined) user.phone = options.body.phone;
-    if (options.body.avatarUrl) user.avatar_url = options.body.avatarUrl;
-    return user as unknown as T;
+    const updates: any = {};
+    if (options.body.fullName) updates.full_name = options.body.fullName;
+    if (options.body.phone !== undefined) updates.phone = options.body.phone;
+    if (options.body.avatarUrl !== undefined) updates.avatar_url = options.body.avatarUrl;
+    if (options.body.bio !== undefined) updates.bio = options.body.bio;
+    if (options.body.dietaryPreferences !== undefined) updates.dietary_preferences = options.body.dietaryPreferences;
+    if (options.body.savedAddresses !== undefined) updates.saved_addresses = options.body.savedAddresses;
+    if (options.body.celebrationDates !== undefined) updates.celebration_dates = options.body.celebrationDates;
+    const updated = MockDataStore.updateUser(activeId, updates);
+    return updated as unknown as T;
   }
 
   // 2. Bakeries
@@ -208,7 +212,7 @@ export function handleMockFallback<T>(endpoint: string, options: { method?: stri
       acc[opt.type].push(opt);
       return acc;
     }, {});
-    return grouped as unknown as T;
+    return { grouped, all: optionsList } as unknown as T;
   }
 
   // 5. Orders

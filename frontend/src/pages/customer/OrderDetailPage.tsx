@@ -363,6 +363,51 @@ export const OrderDetailPage: React.FC = () => {
               </div>
             </div>
 
+            {/* Payment Details Card */}
+            <div className="card" style={{ padding: '1.5rem' }}>
+              <h3 style={{ fontSize: '1.1rem', color: 'var(--text-main)', marginBottom: '1rem', borderBottom: '1px solid var(--border-light)', paddingBottom: '0.5rem' }}>
+                Payment Details
+              </h3>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', fontSize: '0.88rem' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span style={{ color: 'var(--text-light)', fontSize: '0.78rem' }}>Payment Status:</span>
+                  <span
+                    className="badge"
+                    style={{
+                      backgroundColor: order.payment_status === 'PAID' ? '#DEF7EC' : '#FEF3C7',
+                      color: order.payment_status === 'PAID' ? '#03543F' : '#92400E',
+                      fontWeight: 700,
+                    }}
+                  >
+                    {order.payment_status === 'PAID' ? '✓ PAID' : '⏳ PENDING'}
+                  </span>
+                </div>
+
+                <div>
+                  <div style={{ color: 'var(--text-light)', fontSize: '0.78rem' }}>Mode:</div>
+                  <div style={{ fontWeight: 600, color: 'var(--text-main)' }}>
+                    {order.payment_method?.replace(/_/g, ' ') || 'Pay on Delivery'}
+                  </div>
+                </div>
+
+                {order.transaction_id && (
+                  <div>
+                    <div style={{ color: 'var(--text-light)', fontSize: '0.78rem' }}>Ref / Txn ID:</div>
+                    <code style={{ fontSize: '0.8rem', backgroundColor: 'var(--bg-muted)', padding: '2px 6px', borderRadius: '4px' }}>
+                      {order.transaction_id}
+                    </code>
+                  </div>
+                )}
+
+                {order.payment_details && (
+                  <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', fontStyle: 'italic' }}>
+                    {order.payment_details}
+                  </div>
+                )}
+              </div>
+            </div>
+
             {/* Bakery Info */}
             <div className="card" style={{ padding: '1.5rem' }}>
               <h3 style={{ fontSize: '1.1rem', color: 'var(--text-main)', marginBottom: '1rem', borderBottom: '1px solid var(--border-light)', paddingBottom: '0.5rem' }}>
