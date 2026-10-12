@@ -1,39 +1,39 @@
 # 🎂 Whisk & Layers — India-First Artisanal Customized Cake Marketplace
 
-> **A modern, full-stack relational web platform connecting dessert lovers with local artisan bakeries for signature prebuilt recipes and bespoke custom cake creations.**
+> **A modern, full-stack relational marketplace connecting dessert lovers with local artisan bakeries across India for signature gourmet recipes and bespoke customized celebration cakes.**
 > 
 > 🌐 **Live Demo:** [https://desingnerlaunda05.github.io/whisk-and-layers/](https://desingnerlaunda05.github.io/whisk-and-layers/)
 
 ---
 
-## Executive Summary & Core Purpose
+## 🌟 Executive Summary & Core Purpose
 
-**Whisk & Layers** transforms how customers discover local bakeries and order customized celebration cakes. Instead of confusing spreadsheets or generic forms, customers experience a warm, bakery-inspired interface with an interactive 8-step Custom Cake Studio, verified customer reviews, clear lead times, and live stage-by-stage order tracking.
+**Whisk & Layers** transforms how customers in India discover verified local bakeries and order handcrafted celebration cakes. Instead of confusing spreadsheets or generic forms, customers experience a warm, bakery-inspired interface with an interactive 8-step Custom Cake Studio, verified customer reviews, clear lead times, and live stage-by-stage order tracking.
 
-For bakery owners, Whisk & Layers provides a separate management dashboard to accept or decline incoming orders with mandatory reason logging, update preparation milestones (Baking, Decorating, Ready, Out for Delivery), manage their cake catalog, and reply to verified customer reviews.
+For bakery owners across Ahmedabad, Vadodara, Rajkot, Surat, Mumbai, Pune, Bengaluru, New Delhi, Hyderabad, and top Indian cities, Whisk & Layers provides a separate management dashboard to accept or decline incoming orders with mandatory reason logging, update preparation milestones (Baking, Decorating, Ready, Out for Delivery), manage their cake catalog, and reply to verified customer reviews.
 
 ---
 
-## Key Features
+## 🚀 Key Features
 
 ### 👤 Customer Experience
-- **Bakery Discovery**: Browse local artisan bakeries in Gujarat & Maharashtra with ratings, location, minimum lead time notice, and specialty tags.
+- **Bakery Discovery**: Browse local artisan bakeries in Gujarat, Maharashtra, Karnataka, Delhi-NCR & more with ratings, location, minimum lead time notice, and specialty tags.
 - **Cake Catalog**: Filter by category (Signature Celebration, Custom Bases, Indian Fusion Specials, Cheesecakes & Tortes), INR price range, and customizability.
 - **Product Detail**: High-res imagery, preparation lead days, bakery kitchen provenance, quantity picker, eggless badges, and free celebration inscription notes.
-- **Interactive 8-Step Custom Cake Studio**:
-  1. *Step 1*: Sponge Base (Madagascar Vanilla, Valrhona Chocolate, Red Velvet, Lemon Zest)
-  2. *Step 2*: Flavor / Filling (Whipped Mascarpone, Salted Caramel, Wild Berry Compote, Espresso Hazelnut)
-  3. *Step 3*: Size & Servings (6" Round, 8" Round, 10" Round, Two-Tier Showpiece)
-  4. *Step 4*: Cake Shape (Classic Round, Romantic Heart, Sharp Square)
-  5. *Step 5*: Icing & Frosting (Swiss Meringue Buttercream, Cream Cheese, Dark Ganache, Rustic Naked)
-  6. *Step 6*: Toppings (Seasonal Berries, French Macarons, 24k Gold Leaf, Caramel Drips)
-  7. *Step 7*: Decoration Style (Vintage Lambeth Scrollwork, Pressed Botanical Meadow, Palette Knife Stucco)
-  8. *Step 8*: Hand-lettered Inscription Message & Bakery Selection
-  9. *Step 9*: Live Price Review & Blueprint Summary Breakdown
+- **Interactive Custom Cake Studio with 3D Structure Viewer**:
+  - Free-Hand Studio & Step-by-Step Guided Wizard modes.
+  - Inspiration Photo Uploader (upload custom cake images from Instagram/Pinterest for the chef).
+  - Real-time 3D cake visualizer built with Three.js (1 to 4 tiers, Round/Heart/Square/Hexagon geometries, 10+ frosting colors, 3D toppings like macarons, berries, gold leaf, and lit birthday candle).
 - **Cart & Lead Time Protection**: Prevents multi-bakery delivery collisions and validates that required preparation lead days are respected.
-- **Checkout & Payment Architecture**: Transparent delivery scheduling, customer contact fields, and payment settlement selection (Hand-delivery settlement or direct invoice upon approval).
+- **Functional Checkout & Payment Methods**:
+  - Instant UPI (GPay, PhonePe, Paytm, BHIM) with dynamic QR code & NPCI transaction reference generation.
+  - Credit / Debit Card with 3D Secure OTP verification modal simulation.
+  - Net Banking authorization with top Indian banks (SBI, HDFC, ICICI, Axis, Kotak, PNB).
+  - Pay on Delivery (Cash or UPI at doorstep).
+  - 1-click Quick-Fill from saved addresses.
 - **Order Tracking**: Visual milestone progress timeline (`PENDING` ➔ `ACCEPTED` ➔ `PREPARING` ➔ `READY` ➔ `OUT_FOR_DELIVERY` ➔ `DELIVERED` or `REJECTED` with reason).
 - **Verified Reviews**: Authentic star ratings and comments restricted exclusively to customers with delivered orders.
+- **User Profile Customization**: Change profile picture via local file upload or 8 artisan avatar presets, configure dietary preferences (100% Eggless, Vegan, Gluten-Free, Nut-Safe), manage address book, and set celebration reminders.
 
 ### 🧁 Bakery Owner Portal
 - **Bakery Dashboard**: Live metric cards (Pending Approval, In Production, Completed, Settled Revenue in ₹) and urgent pending orders list.
@@ -50,30 +50,31 @@ For bakery owners, Whisk & Layers provides a separate management dashboard to ac
 
 ---
 
-## Demo & Evaluation Accounts
+## 🔑 Demo & Evaluation Accounts
 
 A convenient **1-Click Demo Switcher Bar** is pinned to the top of the header in development mode for instant evaluator access without manual typing:
 
 | Role | Email | Password | Details |
 |---|---|---|---|
-| **Customer** | `customer@whiskandlayers.com` | `Customer123!` | Elena Vance (Has active, delivered, and custom orders) |
-| **Bakery Owner** | `sweetcrust@whiskandlayers.com` | `Bakery123!` | Sweet Crust Artisan Bakes (4.9★, SF) |
-| **Bakery Owner 2**| `velvetlayer@whiskandlayers.com`| `Bakery123!` | Velvet & Layer Confectionery (4.8★, Oakland) |
+| **Customer** | `customer@whiskandlayers.com` | `Customer123!` | Aditya Nair (Has active, delivered, and custom orders) |
+| **Bakery Owner** | `sweetcrust@whiskandlayers.com` | `Bakery123!` | The Whisk House (5.0★, Ahmedabad) |
+| **Bakery Owner 2**| `cocoabloom@whiskandlayers.com`| `Bakery123!` | Cocoa & Bloom Studio (4.9★, Mumbai) |
 | **Admin** | `admin@whiskandlayers.com` | `Admin123!` | Platform Administrator |
 
 ---
 
-## Architecture & Technology Stack
+## 🏗️ Architecture & Technology Stack
 
 ### Frontend
 - **Framework**: React 18 with TypeScript
 - **Bundler & Dev Server**: Vite 6
+- **3D Graphics Engine**: Three.js (WebGL OrbitControls, multi-tier geometry, lighting, particle candle flames)
 - **Routing**: React Router 6 with Role Guards (`RequireAuth`, `RequireRole`)
 - **Icons**: Lucide React
 - **Design System**: Warm artisan bakery CSS tokens (`Playfair Display` serif headings + `Plus Jakarta Sans` UI body)
 
 ### Backend
-- **Runtime**: Node.js v22+ with TypeScript
+- **Runtime**: Node.js v20+ with TypeScript
 - **Web Framework**: Express.js
 - **Layered Architecture**:
   - `routes/` ➔ Domain REST routing
@@ -87,7 +88,7 @@ A convenient **1-Click Demo Switcher Bar** is pinned to the top of the header in
 
 ---
 
-## Repository Structure
+## 📁 Repository Structure
 
 ```
 whisk&layers/
@@ -110,15 +111,15 @@ whisk&layers/
 ├── frontend/
 │   ├── src/
 │   │   ├── components/
-│   │   │   ├── layout/          # Navbar, Footer, BakeryLayout, AdminLayout
-│   │   │   └── ui/              # StatusBadge, OrderTimeline, StarRating, etc.
+│   │   │   ├── layout/          # Navbar, Footer, ScrollToTop, Layouts
+│   │   │   └── ui/              # Cake3DViewer, StatusBadge, OrderTimeline, StarRating
 │   │   ├── context/             # AuthContext, CartContext, ToastContext, NotifContext
 │   │   ├── pages/
-│   │   │   ├── customer/        # Landing, Bakeries, Cakes, Studio, Cart, Checkout, etc.
+│   │   │   ├── customer/        # Landing, Bakeries, Cakes, Studio, Cart, Checkout, Profile
 │   │   │   ├── bakery/          # Dashboard, Orders, Cakes, Reviews, Profile
 │   │   │   ├── admin/           # Dashboard, Bakeries, Users, Orders
 │   │   │   └── auth/            # Login, Register
-│   │   ├── services/            # Frontend API client modules
+│   │   ├── services/            # Frontend API client & MockDataStore
 │   │   ├── styles/              # Design system tokens & CSS rules
 │   │   ├── types/               # Frontend TypeScript definitions
 │   │   ├── App.tsx              # Application route tree
@@ -147,15 +148,16 @@ npm install
 
 ### 2. Run Database Seed & Start Development Services
 ```bash
+# Seed 18+ Indian artisan bakeries and 24 users:
+npm run seed --workspace=backend
+
 # Start backend (Port 5000) and frontend (Port 5173) concurrently:
 npm run dev
 ```
 
-The database initializes automatically on first run with rich realistic sample bakeries, signature cakes, custom builder tokens, initial orders, reviews, and test accounts!
-
 ---
 
-## Running Automated Tests
+## 🧪 Running Automated Tests
 
 Run the backend integration and security test suite:
 
@@ -163,18 +165,9 @@ Run the backend integration and security test suite:
 npm run test
 ```
 
-The suite validates:
-1. Health endpoint & database availability
-2. Customer login & JWT issuance
-3. Bakery owner login & merchant association
-4. Role authorization (Customer blocked from Bakery Dashboard and Admin routes)
-5. Custom cake builder price calculation
-6. Full order lifecycle (Place order ➔ Accept ➔ Preparing ➔ Ready ➔ Delivered ➔ Verified Review)
-7. Rejection business flow with mandatory decline reasoning
-
 ---
 
-## API Overview
+## 🌐 API Overview
 
 | Method | Endpoint | Access | Description |
 |---|---|---|---|
@@ -182,13 +175,14 @@ The suite validates:
 | `POST` | `/api/auth/register` | Public | Register Customer or Bakery |
 | `POST` | `/api/auth/login` | Public | Sign in & receive JWT |
 | `GET` | `/api/auth/me` | Authenticated | Current user profile |
-| `GET` | `/api/bakeries` | Public | Search & list bakeries |
+| `PUT` | `/api/auth/profile` | Authenticated | Update user profile, photo, bio, addresses, celebrations |
+| `GET` | `/api/bakeries` | Public | Search & list 18+ artisan bakeries |
 | `GET` | `/api/bakeries/:idOrSlug` | Public | Bakery storefront & reviews |
 | `PUT` | `/api/bakeries/my-bakery` | Bakery | Update bakery profile |
 | `GET` | `/api/cakes` | Public | Cake catalog with filters |
 | `POST` | `/api/cakes` | Bakery | Add new cake listing |
-| `GET` | `/api/customizations/options` | Public | 8-step builder options |
-| `POST` | `/api/orders` | Customer | Place prebuilt or custom cake order |
+| `GET` | `/api/customizations/options` | Public | Custom studio options |
+| `POST` | `/api/orders` | Customer | Place order with functional payments (UPI/Card/NetBanking/COD) |
 | `GET` | `/api/orders/my-orders` | Customer | View customer order history |
 | `GET` | `/api/orders/bakery/dashboard`| Bakery | Bakery metric stats & urgent orders |
 | `GET` | `/api/orders/bakery/orders` | Bakery | Tabbed bakery order list |
@@ -199,6 +193,5 @@ The suite validates:
 
 ---
 
-## License & Integrity
+## 📄 License & Integrity
 Crafted for **Whisk & Layers**. All business logic, authorization checks, status transitions, and data persistence are fully implemented and production-ready.
-
