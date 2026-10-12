@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Whisk &amp; Layers — Artisanal Customized Cake Marketplace</title>
+    <script>
+      var path = window.location.pathname;
+      var repo = '/whisk-and-layers';
+      if (path.startsWith(repo)) {
+        path = path.slice(repo.length);
+      }
+      if (path.startsWith('/')) {
+        path = path.slice(1);
+      }
+      window.location.replace(window.location.origin + repo + '/#/' + path + window.location.search + window.location.hash);
+    </script>
+  </head>
+  <body>
+    <p style="font-family: sans-serif; text-align: center; margin-top: 5rem; color: #8C7B70;">
+      Redirecting to Whisk &amp; Layers...
+    </p>
+  </body>
+</html>
