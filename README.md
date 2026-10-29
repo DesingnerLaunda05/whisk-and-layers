@@ -3,6 +3,8 @@
 > **A modern, full-stack relational marketplace connecting dessert lovers with local artisan bakeries across India for signature gourmet recipes and bespoke customized celebration cakes.**
 > 
 > 🌐 **Live Demo:** [https://desingnerlaunda05.github.io/whisk-and-layers/](https://desingnerlaunda05.github.io/whisk-and-layers/)
+> 
+> 📄 **Product Requirements Document (PRD):** [📖 Read Online (Markdown)](./Whisk_and_Layers_PRD_Final.md) &nbsp;|&nbsp; [📑 View PDF (15 Pages)](./Whisk_and_Layers_PRD_Final.pdf) &nbsp;|&nbsp; [📥 Download (.docx)](./Whisk_and_Layers_PRD_Final.docx)
 
 ---
 
@@ -47,6 +49,24 @@ For bakery owners across Ahmedabad, Vadodara, Rajkot, Surat, Mumbai, Pune, Benga
 - **Bakery Moderation**: Approve or revoke bakery merchant storefronts.
 - **User Management**: Moderation of customer and bakery accounts with suspension/reactivation toggles.
 - **Global Order Feed**: Real-time order monitoring across all bakeries.
+
+---
+
+## 📄 Product Requirements Document (PRD)
+
+The complete recruiter-facing and engineering-defensible **Product Requirements Document (PRD)** for Whisk & Layers is included directly in this repository:
+
+| Format | Access Link | Description |
+|---|---|---|
+| 📖 **Online Markdown** | [**Whisk_and_Layers_PRD_Final.md**](./Whisk_and_Layers_PRD_Final.md) | Full in-browser reading on GitHub with interactive tables & navigation |
+| 📑 **Executive PDF** | [**Whisk_and_Layers_PRD_Final.pdf**](./Whisk_and_Layers_PRD_Final.pdf) | 15-page formatted PDF with executive typography & printable layout |
+| 📝 **Editable Word Doc** | [**Whisk_and_Layers_PRD_Final.docx**](./Whisk_and_Layers_PRD_Final.docx) | Source `.docx` file for offline review |
+| 🗂️ **PRD Directory** | [**prd/**](./prd/) | Contains complete PRD assets, versions, and Technical Appendix |
+
+### Key PRD Highlights
+- **12 Comprehensive Sections**: Executive Summary, Problem Framing, Proto-Personas & JTBD, Product Vision & Metrics, End-to-End User Journeys, Scope Boundaries, Functional Requirements & Acceptance Criteria, Order State Machine, Non-Functional Requirements, Operational Policies, Roadmap, and Reference Traceability.
+- **Evidence-Led Governance**: Strictly distinguishes verified code implementations and local automated test passes from simulated prototype behaviors and unvalidated hypotheses.
+- **Relational Data Specs & State Machine**: Full specification for 8-state order progression (`PENDING` ➔ `DELIVERED`), single-bakery cart isolation rules, advance lead-time protections, and mandatory rejection logging.
 
 ---
 
